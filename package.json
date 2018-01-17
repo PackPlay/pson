@@ -1,0 +1,12 @@
+{
+  "name": "pson",
+  "version": "1.0.0",
+  "description": "Small lib for parsing pson",
+  "main": "index.js",
+  "repository": "git@github.com:PackPlay/pson.git",
+  "author": "Poon Wu <poon.wuthi@gmail.com>",
+  "license": "none",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
