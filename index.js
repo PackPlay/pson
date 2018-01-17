@@ -93,7 +93,17 @@ const pson = {
             }
         });
         return newObj;
-    }
+    },
+    findById(id, entities) {
+        return findById(id, entities);
+    },
+    createFindById(entities) {
+        return createFindById(entities);
+    },
+
+    Entity: require('./src/Entity'),
+    Point: require('./src/Point'),
+    Line: require('./src/Line')
 };
 
 module.exports = pson;
