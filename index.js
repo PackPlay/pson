@@ -52,9 +52,6 @@ function handleEntity(obj, fn) {
         obj.b = fn(obj.b);
         obj.center = fn(obj.center);
     }
-    if(className === 'Polyline') {
-        obj.segments = obj.segments.map(e => fn(e));
-    }
     if(className === 'Graph') {
         traverse(obj, o => o.data = fn(o.data));
     }
@@ -82,12 +79,12 @@ const pson = {
         }
         
         let newObj = {};
-        let find = createFindById(obj['entities']);
+        let entities = obj['entities'].map(e => this.Entity.createEntityFromData(e));
 
         // link pson array to entities
         _.forOwn(obj, (k, v) => {
             if(_.isArray(v)) {
-                newObj[k] = v.map(e => deference(e, obj['entities']));
+                newObj[k] = v.map(e => deferenceEntity(e, entities));
             } else {
                 newObj[k] = v;
             }
