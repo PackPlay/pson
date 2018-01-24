@@ -38,7 +38,12 @@ class Arc {
     }
 
     dissect(point) {
-        
+        if(point.is(this.a) || point.is(this.b)) {
+            return [this];
+        }
+
+        return [new Arc(this.a, point, this.center, this.radius), 
+                new Arc(point, this.b, this.center, this.radius)];
     }
 }
 

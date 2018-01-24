@@ -30,7 +30,11 @@ class Line extends Entity {
     }
 
     dissect(point) {
-
+        if(point.is(this.a) || point.is(this.b)) {
+            return [this];
+        }
+        
+        return [new Line(this.a, point), new Line(point, this.b)];
     }
 }
 
