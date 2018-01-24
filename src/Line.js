@@ -28,6 +28,10 @@ class Line extends Entity {
 
         return alpha >= 0.0 && alpha <= 1.0;
     }
+
+    dissect(point) {
+
+    }
 }
 
 module.exports = Line;

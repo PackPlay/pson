@@ -9,7 +9,7 @@ class Entity {
      * create derived entity class from object;
      * @param {*Object} object json
      */
-    static createEntityFromData(object) {
+    static createEntityFromData(object, options) {
         let className = object.className;
         let o = null;
         if(className === 'Point') {
@@ -22,7 +22,9 @@ class Entity {
             throw new Error('Unknown entity type ' + JSON.stringify(object));
         }
 
-        o.id = object.id;
+        if(!options.newId) {
+            o.id = object.id;
+        }
         return o;
     }
 
@@ -32,6 +34,10 @@ class Entity {
     // inherit method
     intersect(entity) {
         intersect(this.shape, entity.shape);
+    }
+
+    clone() {
+        return Entity.createEntityFromData(this, {newId: true});
     }
     
     constructor(className, id) {

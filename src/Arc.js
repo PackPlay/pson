@@ -36,6 +36,10 @@ class Arc {
             return false;
         }
     }
+
+    dissect(point) {
+        
+    }
 }
 
 module.exports = Arc;
