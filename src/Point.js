@@ -1,3 +1,4 @@
+const almostEqual = require('almost-equal');
 const Entity = require('./Entity');
 
 class Point extends Entity{
@@ -14,6 +15,9 @@ class Point extends Entity{
     }
     distance(b) {
         return Point.distance(this, b);
+    }
+    is(p) {
+        return almostEqual(this.distance(p), 0);
     }
 }
 
