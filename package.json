@@ -9,6 +9,7 @@
   "dependencies": {
     "almost-equal": "^1.1.0",
     "lodash": "^4.17.4",
+    "svg-intersections": "^0.3.2",
     "uuid": "^3.2.1"
   }
 }

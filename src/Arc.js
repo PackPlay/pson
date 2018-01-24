@@ -1,4 +1,5 @@
 const almostEqual = require('almost-equal');
+const shape = require('svg-intersections');
 const Entity = require('./Entity');
 const Point = require('./Point');
 
@@ -15,6 +16,12 @@ class Arc {
         this.b = b;
         this.center = center;
         this.radius = radius;
+        this.shape = shape('arc', {
+            d: [
+                ['M', a.x, a.y].join(' '),
+                ['A', center.x, center.y, 0, 0, 0, b.x, b.y].join(' ')
+            ].join(' ')
+        });
     }
 
     contains(point) {

@@ -6,9 +6,24 @@ almost-equal@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/almost-equal/-/almost-equal-1.1.0.tgz#f851c631138757994276aa2efbe8dfa3066cccdd"
 
+kld-affine@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/kld-affine/-/kld-affine-2.0.0.tgz#a3f3a96d08deb176a4561c4c552b20d718a253c7"
+
+kld-polynomial@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/kld-polynomial/-/kld-polynomial-0.1.1.tgz#6d7b114db5945409af8e1b6225cd2f0a6b555bd5"
+
 lodash@^4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
+svg-intersections@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/svg-intersections/-/svg-intersections-0.3.2.tgz#7d1b72e871550959f3c79625a7bcceabd365ddc7"
+  dependencies:
+    kld-affine "2.0.0"
+    kld-polynomial "0.1.1"
 
 uuid@^3.2.1:
   version "3.2.1"
