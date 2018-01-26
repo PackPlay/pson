@@ -77,7 +77,7 @@ const pson = {
     write(obj) {
     },  
     read(obj) {
-        let p = new Pson()
+        let p = new this.Pson()
         
         return p.read(obj);
         // if(_.isString(obj)) {
