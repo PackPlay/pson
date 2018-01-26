@@ -1,6 +1,7 @@
 const almostEqual = require('almost-equal');
-const shape = require('svg-intersections');
+const shape = require('svg-intersections').shape;
 const Entity = require('./Entity');
+const Arc = require('./Arc');
 
 class Line extends Entity {
     constructor(a, b) {
@@ -35,6 +36,10 @@ class Line extends Entity {
         }
         
         return [new Line(this.a, point), new Line(point, this.b)];
+    }
+
+    equals(l) {
+        return this.a.equals(l) && this.b.equals(l);
     }
 }
 

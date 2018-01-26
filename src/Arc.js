@@ -1,5 +1,5 @@
 const almostEqual = require('almost-equal');
-const shape = require('svg-intersections');
+const shape = require('svg-intersections').shape;
 const Entity = require('./Entity');
 const Point = require('./Point');
 
@@ -44,6 +44,9 @@ class Arc {
 
         return [new Arc(this.a, point, this.center, this.radius), 
                 new Arc(point, this.b, this.center, this.radius)];
+    }
+    equals(arc) {
+        return this.a.equals(arc.a) && this.b.equals(arc.b) && this.center.equals(arc.center) && this.radius.equals(arc.radius);
     }
 }
 

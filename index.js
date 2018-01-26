@@ -73,6 +73,9 @@ function referenceEntity(obj) {
 }
 
 const pson = {
+    // write class to json
+    write(obj) {
+    },  
     read(obj) {
         if(_.isString(obj)) {
             obj = JSON.parse(obj);
@@ -100,7 +103,13 @@ const pson = {
 
     Entity: require('./src/Entity'),
     Point: require('./src/Point'),
-    Line: require('./src/Line')
+    Line: require('./src/Line'),
+    Arc: require('./src/Arc'),
+    Pson: require('./src/Pson'),
+    
+    test: {
+        sample1: require('./test/sample1.json')
+    }
 };
 
 module.exports = pson;
