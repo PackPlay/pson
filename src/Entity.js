@@ -18,7 +18,7 @@ class Entity {
 
     // inherit method
     intersect(entity) {
-        intersect(this.shape, entity.shape);
+        return intersect(this.shape, entity.shape);
     }
 
     clone() {
