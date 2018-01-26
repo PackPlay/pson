@@ -44,8 +44,8 @@ class Pson {
             json = JSON.parse(json);
         }
         
-        deepMap(json, v => {
-            return (v instanceof Entity) ? Pson.createEntityFromData(v) : v; 
+        json = Pson.map(json, v => {
+            return Pson.createEntityFromData(v); 
         });
 
         _.forOwn(this, (v, k) => {
@@ -65,7 +65,7 @@ class Pson {
      * create derived entity class from object;
      * @param {*Object} object json
      */
-    static createEntityFromData(object, options) {
+    static createEntityFromData(object, options={}) {
         // preexisting entity container
         if(options.entities) {
             let e =_.find(entities, o => o.isClass(entity) && o.equals(entity));
@@ -90,19 +90,20 @@ class Pson {
         }
         return o;
     }
-    // static traverse(object, cb, path='') {
-    //     // graph
-    //     if(_.isArray(object)) {
-    //         _.forEach(object, o => Pson.traverse(o, cb, `${path}[${i}]`));
-    //     } 
-    //     else if(_.isObject(object)) {
-    //         _.forOwn(object, (v, k) => Pson.traverse(o, cb, `${path}.${k}`));
-
-    //         if(object instanceof Entity || object.className) {
-    //             cb(object, path);
-    //         }
-    //     }
-    // }
+    static map(object, cb, path='') {
+        // graph
+        if(_.isArray(object)) {
+            return _.map(object, (o, i) => Pson.map(o, cb, `${path}[${i}]`));
+        } 
+        else if(_.isObject(object) || _.isPlainObject(object)) {
+            object = _.mapValues(object, (o, k) => Pson.map(o, cb, `${path}.${k}`));
+            
+            if(object instanceof Entity || object.className) {
+                return cb(object, path);
+            }
+        }
+        return object;
+    }
 }
 
 module.exports = Pson;
