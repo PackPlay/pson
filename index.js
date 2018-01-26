@@ -77,22 +77,25 @@ const pson = {
     write(obj) {
     },  
     read(obj) {
-        if(_.isString(obj)) {
-            obj = JSON.parse(obj);
-        }
+        let p = new Pson()
         
-        let newObj = {};
-        let entities = obj['entities'].map(e => this.Entity.createEntityFromData(e));
+        return p.read(obj);
+        // if(_.isString(obj)) {
+        //     obj = JSON.parse(obj);
+        // }
+        
+        // let newObj = {};
+        // let entities = obj['entities'].map(e => this.Entity.createEntityFromData(e));
 
-        // link pson array to entities
-        _.forOwn(obj, (k, v) => {
-            if(_.isArray(v)) {
-                newObj[k] = v.map(e => deferenceEntity(e, entities));
-            } else {
-                newObj[k] = v;
-            }
-        });
-        return newObj;
+        // // link pson array to entities
+        // _.forOwn(obj, (k, v) => {
+        //     if(_.isArray(v)) {
+        //         newObj[k] = v.map(e => deferenceEntity(e, entities));
+        //     } else {
+        //         newObj[k] = v;
+        //     }
+        // });
+        // return newObj;
     },
     findById(id, entities) {
         return findById(id, entities);
