@@ -19,11 +19,10 @@ r.cut = [
 ];
 
 r.crease = [
-    new pson.Line(p[0], p[3])
+    new pson.Line(p[0], p[2])
 ]
 
 
 let m = pson.read(pson.test.sample1);
 
-console.log(m.cut[0].a);
-// fs.writeFileSync('./test/sample1.json', JSON.stringify(r.write(), null, 4));
+fs.writeFileSync('./test/sample1.json', JSON.stringify(r.write(), null, 4));
