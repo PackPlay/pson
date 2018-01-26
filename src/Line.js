@@ -31,7 +31,7 @@ class Line extends Entity {
     }
 
     dissect(point) {
-        if(point.is(this.a) || point.is(this.b)) {
+        if(point.equals(this.a) && point.equals(this.b)) {
             return [this];
         }
         
