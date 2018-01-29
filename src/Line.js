@@ -38,6 +38,10 @@ class Line extends Entity {
         return [new Line(this.a, point), new Line(point, this.b)];
     }
 
+    interpolate() {
+        return [this.a, this.b];
+    }
+
     clone() {
         return new Line(this.a, this.b);
     }

@@ -25,8 +25,9 @@ class Entity {
         return new Entity(className);
     }
 
+    // return array of points
     interpolate() {
-        return this;
+        return [];
     }
 
     toJSON() {
