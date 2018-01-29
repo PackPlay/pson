@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const util = require('./util');
 const uuid = require('uuid/v4');
 const intersect = require('svg-intersections').intersect;
 
@@ -23,7 +22,7 @@ class Entity {
     }
 
     clone() {
-        return util.createEntityFromData(this, {newId: true});
+        return new Entity(className);
     }
 
     toJSON() {

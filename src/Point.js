@@ -19,6 +19,9 @@ class Point extends Entity{
     is(p) {
         return almostEqual(this.distance(p), 0);
     }
+    clone() {
+        return new Point(this.x, this.y);
+    }
     equals(p) {
         return almostEqual(this.x, p.x) && almostEqual(this.y, p.y);
     }
