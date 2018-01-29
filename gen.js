@@ -25,4 +25,4 @@ r.crease = [
 
 let m = pson.read(pson.test.sample1);
 
-fs.writeFileSync('./test/sample1.json', JSON.stringify(r.write(), null, 4));
+// fs.writeFileSync('./test/sample1.json', JSON.stringify(r.write(), null, 4));
