@@ -25,6 +25,10 @@ class Entity {
         return new Entity(className);
     }
 
+    interpolate() {
+        return this;
+    }
+
     toJSON() {
         return _.omit(this, ['shape']);
     }
