@@ -1,9 +1,6 @@
 const _ = require('lodash');
 const deepMap = require('deep-map');
-const Entity = require('./Entity');
-const Line = require('./Line');
-const Point = require('./Point');
-const Arc = require('./Arc');
+const util = require('./Util');
 
 function index(obj, is, value) {
     if (typeof is == 'string')
@@ -45,7 +42,7 @@ class Pson {
         }
         
         json = Pson.map(json, v => {
-            return Pson.createEntityFromData(v); 
+            return util.createEntityFromData(v); 
         });
 
         _.forOwn(this, (v, k) => {
@@ -60,35 +57,6 @@ class Pson {
         // Container.traverse(this, (entity) => {
         //     this.createEntityFromData(entity, { entities });
         // });
-    }
-    /**
-     * create derived entity class from object;
-     * @param {*Object} object json
-     */
-    static createEntityFromData(object, options={}) {
-        // preexisting entity container
-        if(options.entities) {
-            let e =_.find(entities, o => o.isClass(entity) && o.equals(entity));
-            if(e) return e;
-        }
-
-        let className = object.className;
-        let o = null;
-
-        if(className === 'Point') {
-            o = new Point(object.x, object.y);
-        } else if(className === 'Arc') {
-            o = new Arc(object.a, object.b, object.center, object.radius);
-        } else if(className === 'Line') {
-            o = new Line(object.a, object.b);
-        } else {
-            throw new Error('Unknown entity type ' + JSON.stringify(object));
-        }
-
-        if(!options.newId) {
-            o.id = object.id;
-        }
-        return o;
     }
     static map(object, cb, path='') {
         // graph
