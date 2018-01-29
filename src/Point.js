@@ -13,6 +13,9 @@ class Point extends Entity{
         this.x = x;
         this.y = y;
     }
+    distance2(b) {
+        return Point.distance(this, b);
+    }
     distance(b) {
         return Point.distance(this, b);
     }
