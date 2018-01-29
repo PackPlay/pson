@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const deepMap = require('deep-map');
-const util = require('./Util');
+const util = require('./util');
 
 function index(obj, is, value) {
     if (typeof is == 'string')

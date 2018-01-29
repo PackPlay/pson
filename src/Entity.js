@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const util = require('./Util');
+const util = require('./util');
 const uuid = require('uuid/v4');
 const intersect = require('svg-intersections').intersect;
 
