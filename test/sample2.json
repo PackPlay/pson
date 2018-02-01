@@ -1,0 +1,153 @@
+{
+    "cut": [
+        {
+            "id": "a885d921-48fe-4f7e-a57b-1c8d949dc4e4",
+            "className": "Line",
+            "a": {
+                "id": "3f9ee750-c2ab-4348-b308-34a627f602f7",
+                "className": "Point",
+                "x": 0,
+                "y": 0
+            },
+            "b": {
+                "id": "012732c3-0c10-48c8-aa7b-ec8b1a131ab4",
+                "className": "Point",
+                "x": 100,
+                "y": 0
+            }
+        },
+        {
+            "id": "98295849-6978-48ea-a914-2e6a2bb415f1",
+            "className": "Line",
+            "a": {
+                "id": "012732c3-0c10-48c8-aa7b-ec8b1a131ab4",
+                "className": "Point",
+                "x": 100,
+                "y": 0
+            },
+            "b": {
+                "id": "8a910b2e-8292-4537-a2d9-e45d8689f223",
+                "className": "Point",
+                "x": 100,
+                "y": 100
+            }
+        },
+        {
+            "id": "1902c301-14ce-4298-a28c-9bfc29989cf1",
+            "className": "Line",
+            "a": {
+                "id": "8a910b2e-8292-4537-a2d9-e45d8689f223",
+                "className": "Point",
+                "x": 100,
+                "y": 100
+            },
+            "b": {
+                "id": "6e9ac7be-a8a3-4497-acb5-468f6f45b9fe",
+                "className": "Point",
+                "x": 0,
+                "y": 100
+            }
+        },
+        {
+            "id": "cae2f2c8-c984-4998-898a-fc1ffce6ac89",
+            "className": "Line",
+            "a": {
+                "id": "3f9ee750-c2ab-4348-b308-34a627f602f7",
+                "className": "Point",
+                "x": 0,
+                "y": 0
+            },
+            "b": {
+                "id": "6e9ac7be-a8a3-4497-acb5-468f6f45b9fe",
+                "className": "Point",
+                "x": 0,
+                "y": 100
+            }
+        },
+        {
+            "id": "3c60773d-1940-455f-9765-b19187909257",
+            "className": "Line",
+            "a": {
+                "id": "c5a08691-4ee7-4e0f-b02e-afa3ddc8281f",
+                "className": "Point",
+                "x": 30,
+                "y": 30
+            },
+            "b": {
+                "id": "db7a7ecf-413b-4e04-b0ee-3ebeb71a2d87",
+                "className": "Point",
+                "x": 60,
+                "y": 30
+            }
+        },
+        {
+            "id": "bdbe6ec9-b67d-484b-bb3a-d0fd1befb89f",
+            "className": "Line",
+            "a": {
+                "id": "db7a7ecf-413b-4e04-b0ee-3ebeb71a2d87",
+                "className": "Point",
+                "x": 60,
+                "y": 30
+            },
+            "b": {
+                "id": "657f0f18-8190-4136-a476-422361598625",
+                "className": "Point",
+                "x": 60,
+                "y": 60
+            }
+        },
+        {
+            "id": "a37bed78-79fe-4261-b49c-141e685a27eb",
+            "className": "Line",
+            "a": {
+                "id": "657f0f18-8190-4136-a476-422361598625",
+                "className": "Point",
+                "x": 60,
+                "y": 60
+            },
+            "b": {
+                "id": "ef0e62d6-5a98-42fd-b133-7523a2767c3d",
+                "className": "Point",
+                "x": 30,
+                "y": 60
+            }
+        },
+        {
+            "id": "909e449c-bb89-4a0f-beba-312f0cf4b797",
+            "className": "Line",
+            "a": {
+                "id": "c5a08691-4ee7-4e0f-b02e-afa3ddc8281f",
+                "className": "Point",
+                "x": 30,
+                "y": 30
+            },
+            "b": {
+                "id": "ef0e62d6-5a98-42fd-b133-7523a2767c3d",
+                "className": "Point",
+                "x": 30,
+                "y": 60
+            }
+        }
+    ],
+    "crease": [
+        {
+            "id": "5bfd4cd2-5a5f-4e23-8cf4-562aa7efabe6",
+            "className": "Line",
+            "a": {
+                "id": "3f9ee750-c2ab-4348-b308-34a627f602f7",
+                "className": "Point",
+                "x": 0,
+                "y": 0
+            },
+            "b": {
+                "id": "8a910b2e-8292-4537-a2d9-e45d8689f223",
+                "className": "Point",
+                "x": 100,
+                "y": 100
+            }
+        }
+    ],
+    "bone": [],
+    "metadata": {},
+    "panels": []
+}

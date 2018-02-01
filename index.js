@@ -111,7 +111,8 @@ const pson = {
     Pson: require('./src/Pson'),
     
     test: {
-        sample1: require('./test/sample1.json')
+        sample1: require('./test/sample1.json'),
+        sample2: require('./test/sample2.json')
     }
 };
 
