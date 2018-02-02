@@ -18,12 +18,26 @@ class Arc extends Entity{
         this.center = center;
         this.radius = radius;
         this.ccw = ccw;
+        this.calculateShape();
+    }
 
+    calculateShape() {
+        let a = this.ccw ? a : b;
+        let b = this.ccw ? b : a;
+        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
+        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
+
+        // assume rotate from a to b
+        if(startRad > endRad) {
+            endRad += 2 * Math.PI;
+        }
+
+        let largeArc = endRad - startRad <= Math.PI ? 0 : 1;
         let d = [
             ['M', a.x, a.y].join(' '),
-            ['A', center.x, center.y, 0, 0, 0, b.x, b.y].join(' ')
+            ['A', this.radius, this.radius, 0, largeArc, 0, b.x, b.y].join(' ')
         ].join(' ');
-        this.shape = shape('arc', { d });
+        this.shape = shape('path', { d });
     }
 
     contains(point) {
@@ -71,6 +85,7 @@ class Arc extends Entity{
         this.a = this.b;
         this.b = t;
         this.ccw = !this.ccw;
+        this.calculateShape();
     }
     interpolate(samplingSize=12) {
         let a = this.ccw ? this.a : this.b;
