@@ -21,6 +21,10 @@ class Entity {
         return intersect(this.shape, entity.shape);
     }
 
+    contains(point) {
+        return false;
+    }
+
     clone() {
         return new Entity(className);
     }

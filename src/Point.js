@@ -19,6 +19,22 @@ class Point extends Entity{
     distance(b) {
         return Point.distance(this, b);
     }
+    subtract(b) {
+        return new Point(this.x - b.x, this.y - b.y);
+    }
+    length() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+    add(b) {
+        return new Point(this.x + b.x, this.y + b.y);
+    }
+    normalize() {
+        let l = this.length();
+        return new Point(this.x / l, this.y / l);
+    }
+    dot(b) {
+        return this.x * b.x + this.y * b.y;
+    }
     is(p) {
         return almostEqual(this.distance(p), 0);
     }

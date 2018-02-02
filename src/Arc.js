@@ -38,7 +38,7 @@ class Arc {
     }
 
     dissect(point) {
-        if(point.equals(this.a) && point.equals(this.b)) {
+        if(point.equals(this.a) || point.equals(this.b)) {
             return [this];
         }
 

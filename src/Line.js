@@ -31,12 +31,15 @@ class Line extends Entity {
     }
 
     dissect(point) {
-        if(point.equals(this.a) && point.equals(this.b)) {
+        if(point.equals(this.a) || point.equals(this.b)) {
             return [this];
         }
         
         return [new Line(this.a, point), new Line(point, this.b)];
     }
+    // contains(point) {
+    //     return almostEqual(this.a.distance(point) + this.b.distance(point), this.a.distance(this.b));
+    // }
 
     interpolate() {
         return [this.a, this.b];
