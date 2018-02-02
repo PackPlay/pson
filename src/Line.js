@@ -52,6 +52,10 @@ class Line extends Entity {
     equals(l) {
         return this.a.equals(l) && this.b.equals(l);
     }
+
+    toString() {
+        return (`L(${l.a.x},${l.a.y} -> ${l.b.x},${l.b.y})`);
+    }
 }
 
 module.exports = Line;

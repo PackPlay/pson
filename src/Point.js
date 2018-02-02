@@ -44,6 +44,9 @@ class Point extends Entity{
     equals(p) {
         return almostEqual(this.x, p.x) && almostEqual(this.y, p.y);
     }
+    toString() {
+        return `(${this.x}, ${this.y})`;
+    }
 }
 
 

@@ -37,6 +37,10 @@ class Entity {
     toJSON() {
         return _.omit(this, ['shape']);
     }
+
+    toString() {
+        return `(${id})`;
+    }
 }
 
 module.exports = Entity;
