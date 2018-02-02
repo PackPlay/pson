@@ -11,9 +11,9 @@ let p = [
     new pson.Point(0,100),
 
     new pson.Point(30,30),
-    new pson.Point(60,30),
-    new pson.Point(60,60),
-    new pson.Point(30,60),
+    new pson.Point(100-30,30),
+    new pson.Point(100-30,100-30),
+    new pson.Point(30,100-30),
 
     new pson.Point(40,0),
     new pson.Point(100-40,100)
