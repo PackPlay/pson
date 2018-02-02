@@ -28,6 +28,9 @@ class Point extends Entity{
     add(b) {
         return new Point(this.x + b.x, this.y + b.y);
     }
+    multiply(scalar) {
+        return new Point(this.x*scalar, this.y*scalar);
+    }
     normalize() {
         let l = this.length();
         return new Point(this.x / l, this.y / l);

@@ -41,6 +41,12 @@ class Line extends Entity {
     //     return almostEqual(this.a.distance(point) + this.b.distance(point), this.a.distance(this.b));
     // }
 
+    swap() {
+        let t = this.a;
+        this.a = this.b;
+        this.b = t;
+    }
+
     interpolate() {
         return [this.a, this.b];
     }

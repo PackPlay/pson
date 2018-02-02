@@ -76,7 +76,7 @@ class Pson {
         if(className === 'Point') {
             o = new Point(object.x, object.y);
         } else if(className === 'Arc') {
-            o = new Arc(object.a, object.b, object.center, object.radius);
+            o = new Arc(object.a, object.b, object.center, object.radius, object.ccw);
         } else if(className === 'Line') {
             o = new Line(object.a, object.b);
         } else {

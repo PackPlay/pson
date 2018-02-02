@@ -111,10 +111,12 @@ const pson = {
     Panel: require('./src/Panel'),
     Pson: require('./src/Pson'),
     
-    test: {
-        sample1: require('./test/sample1.json'),
-        sample2: require('./test/sample2.json')
-    }
+    test: [
+        require('./test/sample0.json'),
+        require('./test/sample1.json'),
+        require('./test/sample2.json'),
+        require('./test/sample3.json')
+    ]
 };
 
 module.exports = pson;

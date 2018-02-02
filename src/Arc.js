@@ -3,7 +3,7 @@ const shape = require('svg-intersections').shape;
 const Entity = require('./Entity');
 const Point = require('./Point');
 
-class Arc {
+class Arc extends Entity{
     /**
      * 
      * @param {*Point} a 
@@ -11,11 +11,13 @@ class Arc {
      * @param {*Point} center 
      * @param {*Number} radius 
      */
-    constructor(a, b, center, radius) {
+    constructor(a, b, center, radius, ccw=true) {
+        super('Arc');
         this.a = a;
         this.b = b;
         this.center = center;
         this.radius = radius;
+        this.ccw = ccw;
 
         let d = [
             ['M', a.x, a.y].join(' '),
@@ -25,16 +27,28 @@ class Arc {
     }
 
     contains(point) {
-        let minX = this.a.x < this.b.x ? this.a.x : this.b.x;
-        let minY = this.a.y < this.b.y ? this.a.y : this.b.y;
-        let maxX = this.a.x > this.b.x ? this.a.x : this.b.x;
-        let maxY = this.a.y > this.b.y ? this.a.y : this.b.y;
+        let d = almostEqual(this.radius, Point.distance(this.center, point));
 
-        if(almostEqual(this.radius, Point.distance(this.center, point), almostEqual.FLT_EPSILON, almostEqual.FLT_EPSILON)) {
-            return point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY;
-        } else {
+        if(!d) {
             return false;
         }
+
+        let a = this.ccw ? this.a : this.b;
+        let b = this.ccw ? this.b : this.a;
+        let rad = 2 * Math.atan2(point.y - this.center.y, point.x - this.center.x + this.radius);
+        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
+        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
+
+        // assume rotate from a to b
+        if(startRad > endRad) {
+            endRad += 2 * Math.PI;
+        }
+
+        let n0 = (rad >= startRad && rad <= endRad);
+        rad += 2 * Math.PI;
+        let n1 = (rad >= startRad && rad <= endRad);
+
+        return n0 || n1;
     }
 
     dissect(point) {
@@ -42,36 +56,43 @@ class Arc {
             return [this];
         }
 
-        return [new Arc(this.a, point, this.center, this.radius), 
-                new Arc(point, this.b, this.center, this.radius)];
+        return [new Arc(this.a, point, this.center, this.radius, this.ccw), 
+                new Arc(point, this.b, this.center, this.radius, this.ccw)];
     }
 
     clone() {
-        return new Arc(this.a, this.b, this.center, this.radius);
+        return new Arc(this.a, this.b, this.center, this.radius, this.ccw);
     }
     equals(arc) {
         return this.a.equals(arc.a) && this.b.equals(arc.b) && this.center.equals(arc.center) && this.radius.equals(arc.radius);
     }
-
+    swap() {
+        let t = this.a;
+        this.a = this.b;
+        this.b = t;
+        this.ccw = !this.ccw;
+    }
     interpolate(samplingSize=12) {
-        let startRad = 2 * Math.atan2(this.a.y - this.center.y, this.a.x - this.center.x + this.radius);
-        let endRad = 2 * Math.atan2(this.b.y - this.center.y, this.b.x - this.center.x + this.radius);
+        let a = this.ccw ? this.a : this.b;
+        let b = this.ccw ? this.b : this.a;
+        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
+        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
 
         // assume rotate from a to b
         if(startRad > endRad) {
             endRad += 2 * Math.PI;
         }
-
+        
         let dRad = (endRad - startRad) / samplingSize;
         let points = [];
-
+        
         for(let i = 0; i < samplingSize; i++) {
             let x = this.center.x + this.radius * Math.cos(dRad * i + startRad);
             let y = this.center.y + this.radius * Math.sin(dRad * i + startRad)
             points.push(new Point(x,y));
         }
         
-        return points;
+        return this.ccw ? points : _.reverse(points);
     }
     toString() {
         return (`A(${this.a.x},${this.a.y} -> ${this.b.x},${this.b.y})`);
