@@ -10,3 +10,5 @@ class Panel extends Entity {
     }
     
 }
+
+module.exports = Panel;

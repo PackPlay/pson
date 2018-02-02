@@ -108,6 +108,7 @@ const pson = {
     Point: require('./src/Point'),
     Line: require('./src/Line'),
     Arc: require('./src/Arc'),
+    Panel: require('./src/Panel'),
     Pson: require('./src/Pson'),
     
     test: {
