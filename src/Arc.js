@@ -17,27 +17,38 @@ class Arc extends Entity{
         this.b = b;
         this.center = center;
         this.radius = radius;
+
         this.ccw = ccw;
         this.calculateShape();
     }
 
     calculateShape() {
-        let a = this.ccw ? a : b;
-        let b = this.ccw ? b : a;
-        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
-        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
+        this.radius = a.distance(center);
+        if(!almostEquals(this.radius, b.distance(center))) {
+            throw new Error('Length from a to center and b to center are not equaled ' + this.radius + ', ' + b.distance(center));
+        }
+        this.shape = shape('circle', { cx: this.center.x, cy: this.center.y, r: this.radius});
+    }
 
-        // assume rotate from a to b
-        if(startRad > endRad) {
-            endRad += 2 * Math.PI;
+    intersect(shape) {
+        let r = super.intersect(shape);
+
+        if(r.points.length > 0) {
+            let t = [];
+
+            while(r.points.length > 0) {
+                let p = r.points.pop();
+                let pt = new Point(p.x, p.y);
+                
+                if(this.contains(pt)) {
+                    t.push(p);
+                }
+            }
+
+            r.points = t;
         }
 
-        let largeArc = endRad - startRad <= Math.PI ? 0 : 1;
-        let d = [
-            ['M', a.x, a.y].join(' '),
-            ['A', this.radius, this.radius, 0, largeArc, 0, b.x, b.y].join(' ')
-        ].join(' ');
-        this.shape = shape('path', { d });
+        return r;
     }
 
     contains(point) {
@@ -85,7 +96,6 @@ class Arc extends Entity{
         this.a = this.b;
         this.b = t;
         this.ccw = !this.ccw;
-        this.calculateShape();
     }
     interpolate(samplingSize=12) {
         let a = this.ccw ? this.a : this.b;
