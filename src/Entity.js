@@ -22,7 +22,10 @@ class Entity {
         result = this.postIntersect(result);
         result = entity.postIntersect(result);
         
-        result.points = result.points.map(e => Math.round(e, 6));
+        result.points.forEach(p => {
+            p.x = Math.round(p, 6);
+            p.y = Math.round(p, 6);
+        });
         return result;
     }
 
