@@ -21,6 +21,8 @@ class Entity {
         let result = intersect(this.shape, entity.shape);
         result = this.postIntersect(result);
         result = entity.postIntersect(result);
+        
+        result.points = result.points.map(e => Math.round(e, 6));
         return result;
     }
 

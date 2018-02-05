@@ -35,7 +35,7 @@ class Arc extends Entity{
         if(r.points.length > 0) {
             let t = [];
 
-            console.log(r.points);
+            // console.log(r.points);
             while(r.points.length > 0) {
                 let p = r.points.pop();
                 let pt = new Point(p.x, p.y);
