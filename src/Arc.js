@@ -30,10 +30,11 @@ class Arc extends Entity{
         this.shape = shape('circle', { cx: this.center.x, cy: this.center.y, r: this.radius});
     }
 
-    postIntersect(result) {
+    postIntersect(r) {
         if(r.points.length > 0) {
             let t = [];
 
+            console.log(r.points);
             while(r.points.length > 0) {
                 let p = r.points.pop();
                 let pt = new Point(p.x, p.y);
@@ -56,19 +57,25 @@ class Arc extends Entity{
 
         let a = this.ccw ? this.a : this.b;
         let b = this.ccw ? this.b : this.a;
-        let rad = 2 * Math.atan2(point.y - this.center.y, point.x - this.center.x + this.radius);
-        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
-        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
+        let rad = Math.atan2(point.y - this.center.y, point.x - this.center.x);
+        let startRad = Math.atan2(a.y - this.center.y, a.x - this.center.x);
+        let endRad = Math.atan2(b.y - this.center.y, b.x - this.center.x);
 
+        // console.log('start', (a.y - this.center.y, a.x - this.center.x))
+        // console.log('end', (b.y - this.center.y, b.x - this.center.x))
+
+        // console.log(this.a.toString(), this.b.toString(), point.toString())
+        // console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
         // assume rotate from a to b
         if(startRad > endRad) {
             endRad += 2 * Math.PI;
         }
+        // console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
 
         let n0 = (rad >= startRad && rad <= endRad);
         rad += 2 * Math.PI;
         let n1 = (rad >= startRad && rad <= endRad);
-
+        
         return n0 || n1;
     }
 
@@ -96,8 +103,8 @@ class Arc extends Entity{
     interpolate(samplingSize=12) {
         let a = this.ccw ? this.a : this.b;
         let b = this.ccw ? this.b : this.a;
-        let startRad = 2 * Math.atan2(a.y - this.center.y, a.x - this.center.x + this.radius);
-        let endRad = 2 * Math.atan2(b.y - this.center.y, b.x - this.center.x + this.radius);
+        let startRad = Math.atan2(a.y - this.center.y, a.x - this.center.x);
+        let endRad = Math.atan2(b.y - this.center.y, b.x - this.center.x);
 
         // assume rotate from a to b
         if(startRad > endRad) {
