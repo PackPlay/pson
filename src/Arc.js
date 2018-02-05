@@ -23,8 +23,8 @@ class Arc extends Entity{
     }
 
     calculateShape() {
-        this.radius = a.distance(center);
-        if(!almostEquals(this.radius, b.distance(center))) {
+        this.radius = this.a.distance(center);
+        if(!almostEquals(this.radius, this.b.distance(center))) {
             throw new Error('Length from a to center and b to center are not equaled ' + this.radius + ', ' + b.distance(center));
         }
         this.shape = shape('circle', { cx: this.center.x, cy: this.center.y, r: this.radius});
