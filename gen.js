@@ -34,7 +34,11 @@ r.crease = [
     new pson.Line(p[8], p[9])
 ]
 
+let a = new pson.Arc (p[2+4], p[0+4], new pson.Point(50, 50), 15);
+let b = new pson.Line(p[8], p[9]);
+
+console.log(a.intersect(b));
 
 // let m = pson.read(pson.test[2]);
 
-fs.writeFileSync('./test/sample3.json', JSON.stringify(r.write(), null, 4));
+// fs.writeFileSync('./test/sample3.json', JSON.stringify(r.write(), null, 4));

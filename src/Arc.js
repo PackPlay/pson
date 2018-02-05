@@ -30,9 +30,7 @@ class Arc extends Entity{
         this.shape = shape('circle', { cx: this.center.x, cy: this.center.y, r: this.radius});
     }
 
-    intersect(shape) {
-        let r = super.intersect(shape);
-
+    postIntersect(result) {
         if(r.points.length > 0) {
             let t = [];
 
@@ -44,10 +42,8 @@ class Arc extends Entity{
                     t.push(p);
                 }
             }
-
             r.points = t;
         }
-
         return r;
     }
 
