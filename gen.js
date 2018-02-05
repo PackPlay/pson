@@ -35,7 +35,7 @@ r.crease = [
 ]
 
 let a = new pson.Arc (new pson.Point(0,0), new pson.Point(100,0), new pson.Point(50, 0), 50);
-let b = new pson.Line(new pson.Point(0, 20), new pson.Point(100, 20));
+let b = new pson.Line(new pson.Point(0, -20), new pson.Point(100, -20));
 
 console.log(a.intersect(b));
 

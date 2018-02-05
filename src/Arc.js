@@ -50,8 +50,8 @@ class Arc extends Entity{
     }
 
     contains(point) {
-        let d = almostEqual(this.radius, Point.distance(this.center, point));
-
+        let d = almostEqual(this.radius, Point.distance(this.center, point), 0.0001, 0);
+        console.log(d, this.radius, Point.distance(this.center, point));
         if(!d) {
             return false;
         }
@@ -65,13 +65,13 @@ class Arc extends Entity{
         // console.log('start', (a.y - this.center.y, a.x - this.center.x))
         // console.log('end', (b.y - this.center.y, b.x - this.center.x))
 
-        // console.log(this.a.toString(), this.b.toString(), point.toString())
-        // console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
+        console.log(a.toString(), b.toString(), point.toString())
+        console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
         // assume rotate from a to b
         if(startRad > endRad) {
             endRad += 2 * Math.PI;
         }
-        // console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
+        console.log(startRad * 180 / Math.PI, endRad * 180 / Math.PI, rad * 180 / Math.PI);
 
         let n0 = (rad >= startRad && rad <= endRad);
         rad += 2 * Math.PI;

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const uuid = require('uuid/v4');
 const intersect = require('svg-intersections').intersect;
+const roundTo = require('round-to');
 
 class Entity {
     constructor(className, id) {
@@ -19,13 +20,14 @@ class Entity {
     // inherit method
     intersect(entity) {
         let result = intersect(this.shape, entity.shape);
+        result.points = result.points.map(p => ({
+            x: roundTo(p.x, 6),
+            y: roundTo(p.y, 6)
+        }));
+        // console.log(result);
         result = this.postIntersect(result);
         result = entity.postIntersect(result);
         
-        result.points.forEach(p => {
-            p.x = Math.round(p.x, 6);
-            p.y = Math.round(p.y, 6);
-        });
         return result;
     }
 
