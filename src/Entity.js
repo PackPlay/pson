@@ -19,8 +19,8 @@ class Entity {
     // inherit method
     intersect(entity) {
         let result = intersect(this.shape, entity.shape);
-        result = this.prune(result);
-        result = entity.prune(result);
+        result = this.postIntersect(result);
+        result = entity.postIntersect(result);
         return result;
     }
 
