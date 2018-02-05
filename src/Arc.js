@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const almostEqual = require('almost-equal');
 const shape = require('svg-intersections').shape;
 const Entity = require('./Entity');
