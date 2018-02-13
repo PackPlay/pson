@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-
+import md5 from 'md5-hash'
 
 class Psonifier {
     static POINT_IN_3D: string = "2000"
@@ -48,7 +48,8 @@ class Psonifier {
                 //map it
                 pointMap[ent['Entity.h.v']] = {
                     'x': ent['Entity.actPoint.x'],
-                    'y': ent['Entity.actPoint.y']
+                    'y': ent['Entity.actPoint.y'],
+                    'spatialHash': md5(ent['Entity.actPoint.x']+","+ent['Entity.actPoint.y'])
                 }
             }
         });
@@ -78,6 +79,7 @@ class Psonifier {
                     return null
             }
         });
+
         console.log(entities)
 
         // console.log(requests, entities, groups, params);

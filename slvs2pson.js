@@ -9,6 +9,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 exports.__esModule = true;
 var fs = require("fs");
+var md5_hash_1 = require("md5-hash");
 var Psonifier = /** @class */ (function () {
     function Psonifier() {
     }
@@ -25,7 +26,8 @@ var Psonifier = /** @class */ (function () {
                 //map it
                 pointMap[ent['Entity.h.v']] = {
                     'x': ent['Entity.actPoint.x'],
-                    'y': ent['Entity.actPoint.y']
+                    'y': ent['Entity.actPoint.y'],
+                    'spatialHash': md5_hash_1["default"](ent['Entity.actPoint.x'] + "," + ent['Entity.actPoint.y'])
                 };
             }
         });
