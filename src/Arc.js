@@ -115,7 +115,7 @@ class Arc extends Entity{
         let dRad = (endRad - startRad) / samplingSize;
         let points = [];
         
-        for(let i = 0; i < samplingSize; i++) {
+        for(let i = 0; i < samplingSize+1; i++) {
             let x = this.center.x + this.radius * Math.cos(dRad * i + startRad);
             let y = this.center.y + this.radius * Math.sin(dRad * i + startRad)
             points.push(new Point(x,y));
