@@ -34,7 +34,7 @@ class Pson {
      * Return json
      */
     write() {
-        return JSON.parse(JSON.stringify(this));
+        return JSON.stringify(this);
     }
     /**
      * Read to Container
