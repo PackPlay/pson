@@ -13,16 +13,28 @@ var md5_hash_1 = require("md5-hash");
 var Psonifier = /** @class */ (function () {
     function Psonifier() {
     }
+    Psonifier.prototype.getAllPlanes = function (rawFile) {
+        rawFile = rawFile.replace(/\n\n/g, ";");
+        var cutMatches = rawFile.match(/name=cut\n[^;]*Group.activeWorkplane.v=([A-z0-9]+)/i);
+        var creaseMatches = rawFile.match(/name=crease\n[^;]*Group.activeWorkplane.v=([A-z0-9]+)/i);
+        if (cutMatches.length == 0 || creaseMatches.length == 0) {
+            throw new Error("stop your wrong missing Cut and Crease group");
+        }
+        return {
+            cut: cutMatches[1],
+            crease: creaseMatches[1]
+        };
+    };
     Psonifier.prototype.fromSolvespace = function (rawFile) {
-        var requests = this.tokenize(rawFile, 'Request');
+        // let requests = this.tokenize(rawFile, 'Request');
         var entities = this.tokenize(rawFile, 'Entity');
-        var groups = this.tokenize(rawFile, 'Group');
-        var params = this.tokenize(rawFile, 'Param');
+        // let groups = this.tokenize(rawFile, 'Group');
+        // let params = this.tokenize(rawFile, 'Param');
+        var planeDef = this.getAllPlanes(rawFile);
         //build point map
         var pointMap = {};
         entities.forEach(function (ent) {
             if (ent["Entity.type"] == Psonifier.POINT_IN_2D) {
-                //if is 2d point
                 //map it
                 pointMap[ent['Entity.h.v']] = {
                     'x': ent['Entity.actPoint.x'],
@@ -32,18 +44,30 @@ var Psonifier = /** @class */ (function () {
             }
         });
         entities = entities.map(function (ent) {
+            var planeName = null;
+            if (ent['Entity.workplane.v'] == planeDef.cut) {
+                planeName = 'cut';
+            }
+            else if (ent['Entity.workplane.v'] == planeDef.crease) {
+                planeName = 'crease';
+            }
+            else {
+                planeName = 'other';
+            }
             switch (ent['Entity.type']) {
                 case Psonifier.POINT_IN_2D:
-                    return __assign({ '_type': 'Point' }, pointMap[ent['Entity.h.v']]);
+                    return __assign({ '_type': 'Point', 'planeName': planeName }, pointMap[ent['Entity.h.v']]);
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
+                        'planeName': planeName,
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     };
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
+                        'planeName': planeName,
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']],
                         'center': pointMap[ent['Entity.point[2].v']]
@@ -52,9 +76,12 @@ var Psonifier = /** @class */ (function () {
                     return null;
             }
         });
-        console.log(entities);
-        // console.log(requests, entities, groups, params);
-        return 'hey';
+        entities = entities.filter(function (k) { return k != null; });
+        return {
+            'entities': entities,
+            'cut': entities.filter(function (k) { return k.planeName === 'cut'; }),
+            'crease': entities.filter(function (k) { return k.planeName === 'crease'; })
+        };
     };
     Psonifier.prototype.tokenize = function (rawFile, type) {
         var M = [];
@@ -108,5 +135,6 @@ var Psonifier = /** @class */ (function () {
 }());
 var c = new Psonifier();
 var file = fs.readFileSync("./test/test.slvs");
-c.fromSolvespace(file.toString());
+var out = c.fromSolvespace(file.toString());
+console.log(out);
 exports["default"] = new Psonifier();

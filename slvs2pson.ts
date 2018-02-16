@@ -33,18 +33,43 @@ class Psonifier {
     static TTF_TEXT: string = "15000"
     static IMAGE: string = "16000"
     static COMMENT: string = "1000"
+    
+    private getAllPlanes(rawFile: string): {
+        cut: string,
+        crease: string
+    }{
+        rawFile = rawFile.replace(/\n\n/g, ";")
+        var cutMatches = rawFile.match(/name=cut\n[^;]*Group.activeWorkplane.v=([A-z0-9]+)/i);
+        var creaseMatches = rawFile.match(/name=crease\n[^;]*Group.activeWorkplane.v=([A-z0-9]+)/i);
 
-    public fromSolvespace(rawFile: string): string {
-        let requests = this.tokenize(rawFile, 'Request');
+        if(cutMatches.length == 0 || creaseMatches.length == 0){
+            throw new Error("stop your wrong missing Cut and Crease group")
+        }
+
+        return {
+            cut: cutMatches[1],
+            crease: creaseMatches[1]
+        }
+    }
+
+
+    public fromSolvespace(rawFile: string): {
+        entities: Array<Object>,
+        cut: Array<Object>,
+        crease: Array<Object>
+    } {
+        // let requests = this.tokenize(rawFile, 'Request');
         let entities = this.tokenize(rawFile, 'Entity');
-        let groups = this.tokenize(rawFile, 'Group');
-        let params = this.tokenize(rawFile, 'Param');
+        // let groups = this.tokenize(rawFile, 'Group');
+        // let params = this.tokenize(rawFile, 'Param');
+        
+        let planeDef = this.getAllPlanes(rawFile);
 
         //build point map
         let pointMap = {}
         entities.forEach((ent)=>{
+
             if(ent["Entity.type"] == Psonifier.POINT_IN_2D){
-                //if is 2d point
                 //map it
                 pointMap[ent['Entity.h.v']] = {
                     'x': ent['Entity.actPoint.x'],
@@ -56,21 +81,34 @@ class Psonifier {
 
 
         entities = entities.map((ent)=>{
+
+            var planeName = null;
+            if(ent['Entity.workplane.v'] == planeDef.cut){
+                planeName = 'cut'
+            }else if(ent['Entity.workplane.v'] == planeDef.crease){
+                planeName = 'crease'
+            }else{
+                planeName = 'other'
+            }
+
             switch(ent['Entity.type']){
                 case Psonifier.POINT_IN_2D:
                     return {
                         '_type': 'Point',
+                        'planeName': planeName,
                         ...pointMap[ent['Entity.h.v']]
                     }
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
+                        'planeName': planeName,
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     }
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
+                        'planeName': planeName,
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']],
                         'center': pointMap[ent['Entity.point[2].v']]
@@ -80,11 +118,12 @@ class Psonifier {
             }
         });
 
-        console.log(entities)
-
-        // console.log(requests, entities, groups, params);
-
-        return 'hey'
+        entities = entities.filter((k:any)=> {return k != null})
+        return {
+            'entities': entities,
+            'cut': entities.filter((k : any)=>{ return k.planeName === 'cut' }),
+            'crease': entities.filter((k : any)=>{ return k.planeName === 'crease' })
+        }
     }
 
     private tokenize(rawFile: string, type?: string): Array<Object>{
@@ -112,7 +151,7 @@ class Psonifier {
 
 let c = new Psonifier();
 let file = fs.readFileSync("./test/test.slvs")
-c.fromSolvespace(file.toString())
-
+let out = c.fromSolvespace(file.toString())
+console.log(out)
 
 export default new Psonifier()
