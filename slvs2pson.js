@@ -37,6 +37,7 @@ var Psonifier = /** @class */ (function () {
             if (ent["Entity.type"] == Psonifier.POINT_IN_2D) {
                 //map it
                 pointMap[ent['Entity.h.v']] = {
+                    'className': 'Point',
                     'x': ent['Entity.actPoint.x'],
                     'y': ent['Entity.actPoint.y'],
                     'spatialHash': md5_hash_1["default"](ent['Entity.actPoint.x'] + "," + ent['Entity.actPoint.y'])
@@ -56,32 +57,53 @@ var Psonifier = /** @class */ (function () {
             }
             switch (ent['Entity.type']) {
                 case Psonifier.POINT_IN_2D:
+<<<<<<< HEAD
                     return __assign({ '_type': 'Point', 'planeName': planeName }, pointMap[ent['Entity.h.v']]);
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
                         'planeName': planeName,
+=======
+                    return __assign({ '_type': 'Point', 'className': 'Point' }, pointMap[ent['Entity.h.v']]);
+                case Psonifier.LINE_SEGMENT:
+                    return {
+                        '_type': 'Line',
+                        'className': 'Line',
+>>>>>>> f02652a75b84a79bdd27dd60aca585870199f17f
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     };
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
+<<<<<<< HEAD
                         'planeName': planeName,
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']],
                         'center': pointMap[ent['Entity.point[2].v']]
+=======
+                        'className': 'Arc',
+                        'center': pointMap[ent['Entity.point[0].v']],
+                        'a': pointMap[ent['Entity.point[1].v']],
+                        'b': pointMap[ent['Entity.point[2].v']]
+>>>>>>> f02652a75b84a79bdd27dd60aca585870199f17f
                     };
                 default:
                     return null;
             }
         });
+<<<<<<< HEAD
         entities = entities.filter(function (k) { return k != null; });
         return {
             'entities': entities,
             'cut': entities.filter(function (k) { return k.planeName === 'cut'; }),
             'crease': entities.filter(function (k) { return k.planeName === 'crease'; })
         };
+=======
+        entities = entities.filter(function (e) { return e; });
+        console.log(requests, entities, groups, params);
+        return { cut: entities };
+>>>>>>> f02652a75b84a79bdd27dd60aca585870199f17f
     };
     Psonifier.prototype.tokenize = function (rawFile, type) {
         var M = [];
@@ -135,6 +157,12 @@ var Psonifier = /** @class */ (function () {
 }());
 var c = new Psonifier();
 var file = fs.readFileSync("./test/test.slvs");
+<<<<<<< HEAD
 var out = c.fromSolvespace(file.toString());
 console.log(out);
 exports["default"] = new Psonifier();
+=======
+c.fromSolvespace(file.toString());
+// export default new Psonifier()
+module.exports = new Psonifier();
+>>>>>>> f02652a75b84a79bdd27dd60aca585870199f17f

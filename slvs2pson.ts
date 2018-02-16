@@ -72,6 +72,7 @@ class Psonifier {
             if(ent["Entity.type"] == Psonifier.POINT_IN_2D){
                 //map it
                 pointMap[ent['Entity.h.v']] = {
+                    'className': 'Point',
                     'x': ent['Entity.actPoint.x'],
                     'y': ent['Entity.actPoint.y'],
                     'spatialHash': md5(ent['Entity.actPoint.x']+","+ent['Entity.actPoint.y'])
@@ -96,28 +97,30 @@ class Psonifier {
                     return {
                         '_type': 'Point',
                         'planeName': planeName,
+                        'className': 'Point',
                         ...pointMap[ent['Entity.h.v']]
                     }
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
                         'planeName': planeName,
+                        'className': 'Line',
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     }
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
+                        'className': 'Arc',
                         'planeName': planeName,
-                        'a': pointMap[ent['Entity.point[0].v']],
-                        'b': pointMap[ent['Entity.point[1].v']],
-                        'center': pointMap[ent['Entity.point[2].v']]
+                        'center': pointMap[ent['Entity.point[0].v']],
+                        'a': pointMap[ent['Entity.point[1].v']],
+                        'b': pointMap[ent['Entity.point[2].v']]
                     }
                 default: 
                     return null
             }
         });
-
         entities = entities.filter((k:any)=> {return k != null})
         return {
             'entities': entities,
@@ -154,4 +157,5 @@ let file = fs.readFileSync("./test/test.slvs")
 let out = c.fromSolvespace(file.toString())
 console.log(out)
 
-export default new Psonifier()
+// export default new Psonifier()
+module.exports = new Psonifier();

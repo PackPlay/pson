@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-
 // find entity by id
 function findById(id, arr){
     if(id) {
@@ -102,6 +101,10 @@ const pson = {
     },
     createFindById(entities) {
         return createFindById(entities);
+    },
+
+    readSlvs(str) {
+        return this.read(require('./slvs2pson.js').fromSolvespace(str));
     },
 
     Entity: require('./src/Entity'),
