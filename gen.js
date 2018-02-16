@@ -34,10 +34,13 @@ r.crease = [
     new pson.Line(p[8], p[9])
 ]
 
-let a = new pson.Arc (new pson.Point(0,0), new pson.Point(100,0), new pson.Point(50, 0), 50);
-let b = new pson.Line(new pson.Point(0, -20), new pson.Point(100, -20));
+let n = fs.readFileSync('./test/test.slvs', {encoding: 'ascii'});
 
-console.log(a.intersect(b));
+console.log(pson.readSlvs(n));
+// let a = new pson.Arc (new pson.Point(0,0), new pson.Point(100,0), new pson.Point(50, 0), 50);
+// let b = new pson.Line(new pson.Point(0, -20), new pson.Point(100, -20));
+
+// console.log(a.intersect(b));
 
 // let m = pson.read(pson.test[2]);
 

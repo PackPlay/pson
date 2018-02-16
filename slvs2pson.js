@@ -25,6 +25,7 @@ var Psonifier = /** @class */ (function () {
                 //if is 2d point
                 //map it
                 pointMap[ent['Entity.h.v']] = {
+                    'className': 'Point',
                     'x': ent['Entity.actPoint.x'],
                     'y': ent['Entity.actPoint.y'],
                     'spatialHash': md5_hash_1["default"](ent['Entity.actPoint.x'] + "," + ent['Entity.actPoint.y'])
@@ -34,27 +35,29 @@ var Psonifier = /** @class */ (function () {
         entities = entities.map(function (ent) {
             switch (ent['Entity.type']) {
                 case Psonifier.POINT_IN_2D:
-                    return __assign({ '_type': 'Point' }, pointMap[ent['Entity.h.v']]);
+                    return __assign({ '_type': 'Point', 'className': 'Point' }, pointMap[ent['Entity.h.v']]);
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
+                        'className': 'Line',
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     };
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
-                        'a': pointMap[ent['Entity.point[0].v']],
-                        'b': pointMap[ent['Entity.point[1].v']],
-                        'center': pointMap[ent['Entity.point[2].v']]
+                        'className': 'Arc',
+                        'center': pointMap[ent['Entity.point[0].v']],
+                        'a': pointMap[ent['Entity.point[1].v']],
+                        'b': pointMap[ent['Entity.point[2].v']]
                     };
                 default:
                     return null;
             }
         });
-        console.log(entities);
-        // console.log(requests, entities, groups, params);
-        return 'hey';
+        entities = entities.filter(function (e) { return e; });
+        console.log(requests, entities, groups, params);
+        return { cut: entities };
     };
     Psonifier.prototype.tokenize = function (rawFile, type) {
         var M = [];
@@ -109,4 +112,5 @@ var Psonifier = /** @class */ (function () {
 var c = new Psonifier();
 var file = fs.readFileSync("./test/test.slvs");
 c.fromSolvespace(file.toString());
-exports["default"] = new Psonifier();
+// export default new Psonifier()
+module.exports = new Psonifier();

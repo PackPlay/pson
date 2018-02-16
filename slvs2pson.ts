@@ -34,7 +34,7 @@ class Psonifier {
     static IMAGE: string = "16000"
     static COMMENT: string = "1000"
 
-    public fromSolvespace(rawFile: string): string {
+    public fromSolvespace(rawFile: string): Object {
         let requests = this.tokenize(rawFile, 'Request');
         let entities = this.tokenize(rawFile, 'Entity');
         let groups = this.tokenize(rawFile, 'Group');
@@ -47,6 +47,7 @@ class Psonifier {
                 //if is 2d point
                 //map it
                 pointMap[ent['Entity.h.v']] = {
+                    'className': 'Point',
                     'x': ent['Entity.actPoint.x'],
                     'y': ent['Entity.actPoint.y'],
                     'spatialHash': md5(ent['Entity.actPoint.x']+","+ent['Entity.actPoint.y'])
@@ -60,31 +61,32 @@ class Psonifier {
                 case Psonifier.POINT_IN_2D:
                     return {
                         '_type': 'Point',
+                        'className': 'Point',
                         ...pointMap[ent['Entity.h.v']]
                     }
                 case Psonifier.LINE_SEGMENT:
                     return {
                         '_type': 'Line',
+                        'className': 'Line',
                         'a': pointMap[ent['Entity.point[0].v']],
                         'b': pointMap[ent['Entity.point[1].v']]
                     }
                 case Psonifier.ARC_OF_CIRCLE:
                     return {
                         '_type': 'Arc',
-                        'a': pointMap[ent['Entity.point[0].v']],
-                        'b': pointMap[ent['Entity.point[1].v']],
-                        'center': pointMap[ent['Entity.point[2].v']]
+                        'className': 'Arc',
+                        'center': pointMap[ent['Entity.point[0].v']],
+                        'a': pointMap[ent['Entity.point[1].v']],
+                        'b': pointMap[ent['Entity.point[2].v']]
                     }
                 default: 
                     return null
             }
         });
+        entities = entities.filter(e => e);
+        console.log(requests, entities, groups, params);
 
-        console.log(entities)
-
-        // console.log(requests, entities, groups, params);
-
-        return 'hey'
+        return { cut: entities };
     }
 
     private tokenize(rawFile: string, type?: string): Array<Object>{
@@ -115,4 +117,5 @@ let file = fs.readFileSync("./test/test.slvs")
 c.fromSolvespace(file.toString())
 
 
-export default new Psonifier()
+// export default new Psonifier()
+module.exports = new Psonifier();
