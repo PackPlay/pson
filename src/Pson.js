@@ -55,7 +55,7 @@ class Pson {
 
         _.forOwn(this, (v, k) => {
             if(k !== 'entities' && _.isArray(v)) {
-                this[k] = _.filter(v, e => e.className === 'Point'); //quickfix: prune out Points 
+                this[k] = _.filter(v, e => e.className !== 'Point'); //quickfix: prune out Points 
             }
         });
 
