@@ -1,5 +1,6 @@
 const almostEqual = require('almost-equal');
 const Entity = require('./Entity');
+const roundTo = require('round-to');
 
 class Point extends Entity{
     static distance(a, b) {
@@ -10,8 +11,8 @@ class Point extends Entity{
     }
     constructor(x, y) {
         super('Point');
-        this.x = x;
-        this.y = y;
+        this.x = roundTo(x, 4);
+        this.y = roundTo(y, 4);
     }
     distance2(b) {
         return Point.distance(this, b);

@@ -21,8 +21,8 @@ class Entity {
     intersect(entity) {
         let result = intersect(this.shape, entity.shape);
         result.points = result.points.map(p => ({
-            x: roundTo(p.x, 6),
-            y: roundTo(p.y, 6)
+            x: roundTo(p.x, 4),
+            y: roundTo(p.y, 4)
         }));
         // console.log(result);
         result = this.postIntersect(result);
