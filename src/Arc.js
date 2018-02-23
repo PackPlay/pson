@@ -25,7 +25,7 @@ class Arc extends Entity{
 
     calculateShape() {
         this.radius = this.a.distance(this.center);
-        if(!almostEqual(this.radius, this.b.distance(this.center), 0.0001, 0)) {
+        if(!almostEqual(this.radius, this.b.distance(this.center), 0.001)) {
             throw new Error('Length from a to center and b to center are not equaled ' + this.radius + ', ' + this.b.distance(this.center));
         }
         this.shape = shape('circle', { cx: this.center.x, cy: this.center.y, r: this.radius});
@@ -93,7 +93,7 @@ class Arc extends Entity{
         return new Arc(this.a, this.b, this.center, this.radius, this.ccw);
     }
     equals(arc) {
-        return this.a.equals(arc.a) && this.b.equals(arc.b) && this.center.equals(arc.center) && this.radius.equals(arc.radius);
+        return this.isClass(arc) && this.a.equals(arc.a) && this.b.equals(arc.b) && this.center.equals(arc.center) && this.radius.equals(arc.radius) && this.ccw === arc.ccw;
     }
     swap() {
         let t = this.a;
