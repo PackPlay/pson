@@ -61,12 +61,47 @@ class Pson {
 
         return this;
     }
+
+    // insert uniquely to entities
+    insertToEntities(entity) {
+        if(!(entity instanceof Entity)) {
+            return entity;
+        }
+        let e = this.findInEntities(entity);
+
+        if(e) {
+            return e;
+        } else {
+            // insert
+            this.entities.push(entity);
+            return entity;
+        }
+    }
+    findInEntities(entity) {
+        if(entity instanceof Entity) {
+            for(let i = 0; i < this.entities.length; i++) {
+                if(this.entities[i].equals(entity)) {
+                    return this.entities[i];
+                }
+            }    
+        }
+        return null;
+    }
+
+    compact() {
+        
+    }
     
-    finalize() {
-        // let entities = [];
-        // Container.traverse(this, (entity) => {
-        //     this.createEntityFromData(entity, { entities });
-        // });
+    // pack all entities into ids
+    // regenerate their ids accordingly
+    registerEntities() {
+        this.entities = [];
+
+        _.forOwn(this, v => {
+            if(k !== 'entities' && _.isArray(v)) {
+               this[k] = Pson.map(v, e => this.insertToEntities(e));
+            }
+        });
     }
 
     static createEntityFromData(object, options={}) {

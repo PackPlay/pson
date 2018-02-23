@@ -46,7 +46,7 @@ class Point extends Entity{
         return new Point(this.x, this.y);
     }
     equals(p) {
-        return almostEqual(this.x, p.x) && almostEqual(this.y, p.y);
+        return this.isClass(p) && almostEqual(this.x, p.x) && almostEqual(this.y, p.y);
     }
     toString() {
         return `(${this.x}, ${this.y})`;

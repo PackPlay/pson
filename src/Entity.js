@@ -14,7 +14,7 @@ class Entity {
     }
 
     equals(entity) {
-        return this.id && entity.id && this.id === entity.id;
+        return this.isClass(entity) && this.id && entity.id && this.id === entity.id;
     }
 
     // inherit method
