@@ -11,8 +11,8 @@ class Point extends Entity{
     }
     constructor(x, y) {
         super('Point');
-        this.x = roundTo(x, 4);
-        this.y = roundTo(y, 4);
+        this.x = roundTo(x, 6);
+        this.y = roundTo(y, 6);
     }
     distance2(b) {
         return Point.distance(this, b);
@@ -46,7 +46,7 @@ class Point extends Entity{
         return new Point(this.x, this.y);
     }
     equals(p) {
-        return almostEqual(this.x, p.x) && almostEqual(this.y, p.y);
+        return almostEqual(this.x, p.x, 0.0001) && almostEqual(this.y, p.y, 0.0001);
     }
     toString() {
         return `(${this.x}, ${this.y})`;
