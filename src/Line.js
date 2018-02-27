@@ -52,6 +52,8 @@ class Line extends Entity {
         if(sampleSize < 2) {
             sampleSize = 2;
         }
+        let a = this.a;
+        let b = this.b;
         let res = [];
         for(let i = 0; i < sampleSize; i++) {
             res.push(new Point(
