@@ -1,6 +1,7 @@
 const almostEqual = require('almost-equal');
 const shape = require('svg-intersections').shape;
 const Entity = require('./Entity');
+const Point = require('./Point');
 const Arc = require('./Arc');
 
 class Line extends Entity {
