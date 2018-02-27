@@ -47,8 +47,18 @@ class Line extends Entity {
         this.b = t;
     }
 
-    interpolate() {
-        return [this.a, this.b];
+    interpolate(sampleSize=2) {
+        if(sampleSize < 2) {
+            sampleSize = 2;
+        }
+        let res = [];
+        for(let i = 0; i < sampleSize; i++) {
+            res.push(new Point(
+                a.x + (b.x-a.x) * i,
+                a.y + (b.y-a.y) * i
+            ));
+        }
+        return res;
     }
 
     clone() {
