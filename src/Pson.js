@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const deepMap = require('deep-map');
 const Entity = require('./Entity');
+const Panel = require('./Panel');
 const Line = require('./Line');
 const Point = require('./Point');
 const Arc = require('./Arc');
@@ -30,10 +31,22 @@ class Pson {
         }
     }
 
+    reset() {
+        this.cut = [];
+        this.crease = [];
+        this.bone = [];
+        this.metadata = {};
+        this.panels = [];
+        this.entities = [];
+    }
+
     /**
      * Return json
      */
     write() {
+        //compacting data
+        this.packEntities();
+        console.log('entities', this.entities.length);
         return JSON.stringify(this);
     }
     /**
@@ -41,18 +54,20 @@ class Pson {
      * @param {*String|Object} json 
      */
     read(json) {
+        this.reset();
         if(_.isString(json)) {
             json = JSON.parse(json);
         }
-        
-        json = Pson.map(json, v => {
-            return Pson.createEntityFromData(v); 
-        });
 
+        // fast copy
         _.forOwn(this, (v, k) => {
             this[k] = json[k] || v;
         });
 
+        // unpack entities to objects
+        this.unpackEntities();
+
+        // pruning
         _.forOwn(this, (v, k) => {
             if(k !== 'entities' && _.isArray(v)) {
                 this[k] = _.filter(v, e => e.className !== 'Point'); //quickfix: prune out Points 
@@ -65,10 +80,10 @@ class Pson {
     // insert uniquely to entities
     insertToEntities(entity) {
         if(!(entity instanceof Entity)) {
+            // console.log('test', entity.className);
             return entity;
         }
         let e = this.findInEntities(entity);
-
         if(e) {
             return e;
         } else {
@@ -78,39 +93,87 @@ class Pson {
         }
     }
     findInEntities(entity) {
-        if(entity instanceof Entity) {
-            for(let i = 0; i < this.entities.length; i++) {
-                if(this.entities[i].equals(entity)) {
-                    return this.entities[i];
-                }
-            }    
-        }
+        // console.log(entity);
+        for(let i = 0; i < this.entities.length; i++) {
+            if(this.entities[i].isClass(entity) && this.entities[i].equals(entity)) {
+                return this.entities[i];
+            }
+        }    
         return null;
     }
-
-    compact() {
-        
+    getEntityById(id) {
+        return _.find(this.entities, r => r.id === id) || id;
     }
-    
     // pack all entities into ids
     // regenerate their ids accordingly
-    registerEntities() {
+    packEntities() {
         this.entities = [];
+        // console.log(this);
 
-        _.forOwn(this, v => {
-            if(k !== 'entities' && _.isArray(v)) {
-               this[k] = Pson.map(v, e => this.insertToEntities(e));
+        _.forOwn(this, (v,k) => {
+            if(k !== 'entities') {
+                // console.log(k, v);
+                this[k] = Pson.map(v, e => this.insertToEntities(e));
+            }
+        });
+
+        _.forEach(this.entities, (e, i) => {
+            e.id = 'e-'+i;
+        });
+        this.entities = _.map(this.entities, e => Pson.map(e, (c, path) => {
+            if(path === '') {
+                return c; 
+            } else {
+                return c.id;
+            }
+        }));
+        
+        _.forOwn(this, (v,k) => {
+            if(k !== 'entities') {
+                this[k] = Pson.map(v, e => e.id);
+            }
+        });
+        // console.log('entities', this.entities);
+    }
+    unpackEntities() {
+        this.entities = _.map(this.entities, e => {
+            if(e.className === 'Point')
+                return Pson.createEntityFromData(e);
+            return e;
+        });
+        let atomic = this.entities.filter(e => e instanceof Entity);
+
+        // console.log('atom', atomic);
+        this.entities = Pson.mapNotObject(this.entities, (r, path) => {
+            if(!path.endsWith('.id')) {
+                return _.find(atomic, a => a.id === r) || r;
+            }
+            return r;
+        });
+        this.entities = _.map(this.entities, e => Pson.createEntityFromData(e));
+        this.entities = Pson.mapNotObject(this.entities, (r, path) => {
+            if(!path.endsWith('.id'))
+                return this.getEntityById(r);
+            return r;
+        });
+
+        // console.log(this.entities)
+        _.forOwn(this, (v, k) => {
+            if(k !== 'entities') {
+                if(_.isArray(v)) {
+                    this[k] = v.map(e => this.getEntityById(e));
+                } else if(!_.isObject(v)){
+                    this[k] = this.getEntityById(v);
+                }
             }
         });
     }
 
     static createEntityFromData(object, options={}) {
         // preexisting entity container
-        if(options.entities) {
-            let e =_.find(entities, o => o.isClass(entity) && o.equals(entity));
-            if(e) return e;
+        if(object instanceof Entity) {
+            return object;
         }
-
         let className = object.className;
         let o = null;
 
@@ -120,6 +183,8 @@ class Pson {
             o = new Arc(object.a, object.b, object.center, object.radius, object.ccw);
         } else if(className === 'Line') {
             o = new Line(object.a, object.b);
+        } else if(className === 'Panel') {
+            o = new Panel(object.outer, object.inner, object.metadata, object.hash, object.connections);
         } else {
             throw new Error('Unknown entity type ' + JSON.stringify(object));
         }
@@ -129,18 +194,55 @@ class Pson {
         }
         return o;
     }
+    static map(object, cb, path='', tree=[]) {
+        // prevent recursion
+            // console.log(tree.length);
+        if(_.findIndex(tree, e => e === object) >= 0) {
+            return object;
+        }
+        tree = tree.slice();
+        tree.push(object);
 
-    static map(object, cb, path='') {
-        // graph
         if(_.isArray(object)) {
-            return _.map(object, (o, i) => Pson.map(o, cb, `${path}[${i}]`));
+            return _.map(object, (o, i) => Pson.map(o, cb, `${path}[${i}]`, tree));
         } 
         else if(_.isObject(object) || _.isPlainObject(object)) {
-            object = _.mapValues(object, (o, k) => Pson.map(o, cb, `${path}.${k}`));
-            
-            if(object instanceof Entity || object.className) {
+            _.forOwn(object, (v,k) => {
+                // console.log('o', object[k]);
+                try {
+                    object[k] = Pson.map(v, cb,`${path}.${k}`, tree);
+                } catch(e) {
+
+                }
+            });
+            if(object.className) {
                 return cb(object, path);
             }
+        }
+        return object;
+    }
+
+    static mapNotObject(object, cb, path='', tree=[]) {
+        // prevent recursion
+        if(_.findIndex(tree, e => e === object) >= 0) {
+            return object;
+        }
+        tree = tree.slice();
+        tree.push(object);
+
+        if(_.isArray(object)) {
+            return _.map(object, (o, i) => Pson.mapNotObject(o, cb, `${path}[${i}]`, tree));
+        } 
+        else if(_.isObject(object) || _.isPlainObject(object)) {
+            _.forOwn(object, (v,k) => {
+                try {
+                    object[k] = Pson.mapNotObject(v, cb,`${path}.${k}`, tree);
+                } catch(e) {
+
+                }
+            });
+        } else {
+            return cb(object, path);
         }
         return object;
     }

@@ -34,9 +34,23 @@ r.crease = [
     new pson.Line(p[8], p[9])
 ]
 
-let n = fs.readFileSync('./test/test.slvs', {encoding: 'ascii'});
+let a = new pson.Panel([], []);
+let b = new pson.Panel([], []);
 
-console.log(pson.readSlvs(n));
+a.connections = [b];
+b.connections = [a];
+r.panels = [a,b]
+// console.log('test', a instanceof pson.Entity);
+let str = r.write();
+
+let next = new pson.Pson();
+
+next.read(str);
+console.log('next', next.panels[1].connections);
+
+// let n = fs.readFileSync('./test/test.slvs', {encoding: 'ascii'});
+
+// console.log(pson.readSlvs(n));
 // let a = new pson.Arc (new pson.Point(0,0), new pson.Point(100,0), new pson.Point(50, 0), 50);
 // let b = new pson.Line(new pson.Point(0, -20), new pson.Point(100, -20));
 

@@ -5,12 +5,17 @@ const roundTo = require('round-to');
 
 class Entity {
     constructor(className, id) {
-        this.id = id || uuid();
+        this.id = id;
         this.className = className || 'Entity';
+        // this.baseName = 'Entity';
     }
 
     isClass(entity) {
-        return this.entity.className === entity.className;
+        return this.className === entity.className;
+    }
+
+    generateId() {
+        this.id = uuid();
     }
 
     equals(entity) {
