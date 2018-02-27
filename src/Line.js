@@ -54,8 +54,8 @@ class Line extends Entity {
         let res = [];
         for(let i = 0; i < sampleSize; i++) {
             res.push(new Point(
-                a.x + (b.x-a.x) * i,
-                a.y + (b.y-a.y) * i
+                a.x + (b.x-a.x) * (i / (sampleSize-1)),
+                a.y + (b.y-a.y) * (i / (sampleSize-1))
             ));
         }
         return res;
