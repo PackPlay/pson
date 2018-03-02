@@ -43,22 +43,32 @@ class Pson {
     /**
      * Return json
      */
-    write() {
+    write(pack=true) {
         //compacting data
-        this.packEntities();
-        let r = JSON.stringify(this);
-        this.unpackEntities(); //pack entity mutilate the obj, so we're reverting
+        let r = '';
+        if(pack) {
+            this.packEntities();
+            let r = JSON.stringify(this);
+            this.unpackEntities(); //pack entity mutilate the obj, so we're reverting
+        } else {
+            r = JSON.stringify(this); //risk circular json problem
+        }
         return r;
     }
     /**
      * Read to Container
      * @param {*String|Object} json 
      */
-    read(json) {
+    read(json, unpack=true) {
         this.reset();
         if(_.isString(json)) {
             json = JSON.parse(json);
         }
+        // force non-unpack on no entities detected
+        if(!json.entities) {
+            unpack = false;
+        }
+        console.log('unpack', unpack);
 
         // fast copy
         _.forOwn(this, (v, k) => {
@@ -66,8 +76,13 @@ class Pson {
         });
 
         // unpack entities to objects
-        this.unpackEntities();
-
+        if(unpack) {
+            this.unpackEntities();
+        } else {
+            _.forOwn(this, (v, k) => {
+                this[k] = Pson.map(v, e => createEntityFromData(e));
+            });
+        }
         // pruning out Point in segments
         _.forOwn(this, (v, k) => {
             if(k !== 'entities' && _.isArray(v)) {
