@@ -46,8 +46,9 @@ class Pson {
     write() {
         //compacting data
         this.packEntities();
-        console.log('entities', this.entities.length);
-        return JSON.stringify(this);
+        let r = JSON.stringify(this);
+        this.unpackEntities(); //pack entity mutilate the obj, so we're reverting
+        return r;
     }
     /**
      * Read to Container
@@ -67,13 +68,15 @@ class Pson {
         // unpack entities to objects
         this.unpackEntities();
 
-        // pruning
+        // pruning out Point in segments
         _.forOwn(this, (v, k) => {
             if(k !== 'entities' && _.isArray(v)) {
+                // console.log('pruning', v);
                 this[k] = _.filter(v, e => e.className !== 'Point'); //quickfix: prune out Points 
             }
         });
 
+        console.log('read');
         return this;
     }
 

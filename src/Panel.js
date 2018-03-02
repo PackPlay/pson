@@ -13,10 +13,17 @@ class Panel extends Entity {
         this.connections = connections // panels connected to this panel
     }
 
-    addConnection(panel) {
-        if(!_.includes(this.connections, panel)) {
-            this.connections.push(panel);
-        } 
+    addConnection(panel, checkSegments=true) {
+        let c = _.find(this.connections, c => c.panel.hash === panel.hash);
+        if(c) {
+            return true;
+        } else {
+            let segments = _.intersectionWith(this.outer, panel.outer, (a, b) => a.equals(b));
+            if(segments.length > 0) {
+                this.connections.push({panel, segments});        
+            }
+        }
+        return false;
     }
 
     buildGraph(root={}, checkpoints=[]) {
@@ -28,7 +35,7 @@ class Panel extends Entity {
         root.children = [];
 
         this.connections.forEach(e => {
-            let r = e.buildGraph(o, checkpoints);
+            let r = e.panel.buildGraph(o, checkpoints);
             if(r) {
                 root.children.push(r);
             }
