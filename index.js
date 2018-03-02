@@ -75,10 +75,10 @@ const pson = {
     // write class to json
     write(obj) {
     },  
-    read(obj) {
+    read(obj, unpack) {
         let p = new this.Pson()
         
-        return p.read(obj);
+        return p.read(obj, unpack);
         // if(_.isString(obj)) {
         //     obj = JSON.parse(obj);
         // }

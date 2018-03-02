@@ -68,7 +68,6 @@ class Pson {
         if(!json.entities) {
             unpack = false;
         }
-        console.log('unpack', unpack);
 
         // fast copy
         _.forOwn(this, (v, k) => {
@@ -80,7 +79,7 @@ class Pson {
             this.unpackEntities();
         } else {
             _.forOwn(this, (v, k) => {
-                this[k] = Pson.map(v, e => createEntityFromData(e));
+                this[k] = Pson.map(v, e => Pson.createEntityFromData(e));
             });
         }
         // pruning out Point in segments
