@@ -48,7 +48,7 @@ class Pson {
         let r = '';
         if(pack) {
             this.packEntities();
-            let r = JSON.stringify(this);
+            r = JSON.stringify(this);
             this.unpackEntities(); //pack entity mutilate the obj, so we're reverting
         } else {
             r = JSON.stringify(this); //risk circular json problem
