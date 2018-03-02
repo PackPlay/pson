@@ -20,7 +20,8 @@ class Panel extends Entity {
         } else {
             let segments = _.intersectionWith(this.outer, panel.outer, (a, b) => a.equals(b));
             if(segments.length > 0) {
-                this.connections.push({panel, segments});        
+                this.connections.push({panel, segments}); 
+                return true;       
             }
         }
         return false;

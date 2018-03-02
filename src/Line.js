@@ -69,7 +69,9 @@ class Line extends Entity {
     }
 
     equals(l) {
-        return this.isClass(l) && this.a.equals(l) && this.b.equals(l);
+        return this.isClass(l) && 
+            ((this.a.equals(l.a) && this.b.equals(l.b)) || 
+                (this.a.equals(l.b) && this.b.equals(l.a)));
     }
 
     toString() {

@@ -93,7 +93,8 @@ class Arc extends Entity{
         return new Arc(this.a, this.b, this.center, this.radius, this.ccw);
     }
     equals(arc) {
-        return this.isClass(arc) && this.a.equals(arc.a) && this.b.equals(arc.b) && this.center.equals(arc.center) && this.radius.equals(arc.radius) && this.ccw === arc.ccw;
+        return this.isClass(arc) && this.center.equals(arc.center) &&
+            (this.ccw === arc.ccw ? (this.a.equals(arc.a) && this.b.equals(arc.b)) : (this.a.equals(arc.b) && this.b.equals(arc.a)));
     }
     swap() {
         let t = this.a;
