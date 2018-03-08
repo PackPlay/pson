@@ -36,7 +36,7 @@ class Panel extends Entity {
         root.children = [];
 
         this.connections.forEach(e => {
-            let r = e.panel.buildGraph(o, checkpoints);
+            let r = e.panel.buildGraph({}, checkpoints);
             if(r) {
                 root.children.push(r);
             }
