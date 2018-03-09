@@ -182,7 +182,7 @@ class Pson {
                 } else if(!_.isObject(v)){
                     this[k] = this.getEntityById(v);
                 } else if(v.children) { // is graph
-                    this[k] = Pson.mapNotObject(this.entities, (r, path) => {
+                    this[k] = Pson.mapNotObject(v, (r, path) => {
                         if(!path.endsWith('.id'))
                             return this.getEntityById(r);
                         return r;
@@ -253,7 +253,7 @@ class Pson {
         tree = tree.slice();
         tree.push(object);
 
-        if(_.isArray(object)) {
+        if(_.isArray(object) && !_.isPlainObject(object)) {
             return _.map(object, (o, i) => Pson.mapNotObject(o, cb, `${path}[${i}]`, tree));
         } 
         else if(_.isObject(object) || _.isPlainObject(object)) {
