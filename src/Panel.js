@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const almostEqual = require('almost-equal');
 const Entity = require('./Entity');
 const Util = require('./util.js');
 const uuid = require('uuid/v4');
@@ -27,6 +28,7 @@ class Panel extends Entity {
         return false;
     }
 
+    // use lmtm algorithm
     buildGraph(root={}, checkpoints=[]) {
         if(_.includes(checkpoints, this.hash)) {
             return null;
@@ -35,6 +37,26 @@ class Panel extends Entity {
         root.current = this;
         root.children = [];
 
+        let pivot = Util.midpoint(root.current.outer);
+
+        this.connections = this.connections
+            .map(e => ({midpoint: Util.midpoint(e.panel.outer, pivot), connection: e}))
+            .sort((a,b) => {
+                if(a.x < b.x) {
+                    return -1;
+                } else if(a.x > b.x) {
+                    return 1;
+                } else if(almostEqual(a.x, b.x, 0.0001)) {
+                    if(a.y > b.y) {
+                        return -1;
+                    } else if(a.y < b.y) {
+                        return 1;
+                    }
+                }
+                return 0;
+            })
+            .map(e => e.connection);
+        
         this.connections.forEach(e => {
             let r = e.panel.buildGraph({}, checkpoints);
             if(r) {
