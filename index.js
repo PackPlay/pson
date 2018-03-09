@@ -103,10 +103,6 @@ const pson = {
         return createFindById(entities);
     },
 
-    readSlvs(str) {
-        return this.read(require('./slvs2pson.js').fromSolvespace(str));
-    },
-
     Entity: require('./src/Entity'),
     Point: require('./src/Point'),
     Line: require('./src/Line'),
