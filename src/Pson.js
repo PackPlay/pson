@@ -181,6 +181,12 @@ class Pson {
                     this[k] = v.map(e => this.getEntityById(e));
                 } else if(!_.isObject(v)){
                     this[k] = this.getEntityById(v);
+                } else if(v.children) { // is graph
+                    this[k] = Pson.mapNotObject(this.entities, (r, path) => {
+                        if(!path.endsWith('.id'))
+                            return this.getEntityById(r);
+                        return r;
+                    });
                 }
             }
         });
