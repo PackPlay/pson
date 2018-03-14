@@ -14,13 +14,13 @@ class Util {
             console.log(sum, n);
            sum.x += n.x / all.length;
            sum.y += n.y / all.length; 
-        }, new Point(0,0));
+        }, {x:0, y:0});
 
         if(pivot) {
             s.x -= pivot.x;
             s.y -= pivot.y;
         }
-        return s;
+        return new Point(s.x, s.y);
     }
 }
 
