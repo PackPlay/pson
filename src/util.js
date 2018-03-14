@@ -8,6 +8,7 @@ class Util {
     static midpoint(segments, pivot) {
         let all = _.flatten(segments.map(e => e.interpolate(5).slice(0, -1)));
         
+        console.log(all);
         let s = _.reduce(all, (sum, n) => {
            sum.x += n.x / all.length;
            sum.y += n.y / all.length; 

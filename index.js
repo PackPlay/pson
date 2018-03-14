@@ -74,7 +74,7 @@ function referenceEntity(obj) {
 const pson = {
     // write class to json
     write(obj) {
-    },  
+    },      
     read(obj, unpack) {
         let p = new this.Pson()
         
