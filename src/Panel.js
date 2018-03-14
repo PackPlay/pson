@@ -5,12 +5,12 @@ const Util = require('./util.js');
 const uuid = require('uuid/v4');
 
 class Panel extends Entity {
-    constructor(outer, inner, metadata, hash=uuid(), connections=[]) {
+    constructor(outer, inner, meta={}, hash=uuid(), connections=[]) {
         super('Panel');
         this.outer = outer;
         this.inner = inner;
         this.hash = hash;
-        this.metadata = metadata;
+        this.meta = meta;
         this.connections = connections // panels connected to this panel
     }
 
