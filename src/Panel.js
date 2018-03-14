@@ -70,6 +70,10 @@ class Panel extends Entity {
             })
             .map( ({ data }) => data );
     }
+
+    midpoint() {
+        return Util.midpoint(this.outer);
+    }
  
     equals(p) {
         return this.hash === p.hash;
