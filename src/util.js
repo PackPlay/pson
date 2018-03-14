@@ -11,10 +11,10 @@ class Util {
         
         console.log('all', all);
         let s = _.reduce(all, (sum, n) => {
-            console.log(sum, n);
-           sum.x += n.x / all.length;
-           sum.y += n.y / all.length; 
-        }, {x:0, y:0});
+            sum.x += n.x / all.length;
+            sum.y += n.y / all.length; 
+            return sum;
+        }, new Point(0,0));
 
         if(pivot) {
             s.x -= pivot.x;
