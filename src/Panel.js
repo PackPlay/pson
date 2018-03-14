@@ -39,9 +39,22 @@ class Panel extends Entity {
 
         let pivot = Util.midpoint(root.current.outer);
 
-        this.connections = this.connections
-            .map(e => ({midpoint: Util.midpoint(e.panel.outer, pivot), connection: e}))
-            .sort((a,b) => {
+        this.connections = Panel.applyLmtm(this.connections, item => Util.midpoint(item.panel.outer, pivot));
+        this.connections.forEach(e => {
+            let r = e.panel.buildGraph({}, checkpoints);
+            if(r) {
+                root.children.push(r);
+            }
+        });
+
+        return root;
+    }
+
+    // sort panels by lmtm rule
+    static applyLmtm(panels, transformFn) {
+        return panels.slice()
+            .map( e => ({ ...transformFn(e), data: e }) ) // get midpoint or whatever
+            .sort( (a, b) => { //lmtm sorting
                 if(a.x < b.x) {
                     return -1;
                 } else if(a.x > b.x) {
@@ -55,16 +68,7 @@ class Panel extends Entity {
                 }
                 return 0;
             })
-            .map(e => e.connection);
-        
-        this.connections.forEach(e => {
-            let r = e.panel.buildGraph({}, checkpoints);
-            if(r) {
-                root.children.push(r);
-            }
-        });
-
-        return root;
+            .map( ({ data }) => data );
     }
  
     equals(p) {
