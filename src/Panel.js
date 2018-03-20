@@ -62,7 +62,7 @@ class Panel extends Entity {
 
         // sort by lmtm rule
         let pivot = Util.midpoint(current.panel.outer);
-        Panel.sortLmtm(panel.connections, item => Util.midpoint(item.panel.outer, pivot))
+        Panel.applyLmtm(panel.connections, item => Util.midpoint(item.panel.outer, pivot))
             .forEach(e => {
                 // build children
                 let r = Panel._buildGraph(panels, e.panel, checkpoints, current);
@@ -82,7 +82,7 @@ class Panel extends Entity {
     }
 
     // sort panels by lmtm rule
-    static sortLmtm(panels, transformFn) {
+    static applyLmtm(panels, transformFn) {
         return panels.slice()
             .map( e => ({ ...transformFn(e), data: e }) ) // get midpoint or whatever
             .sort( (a, b) => { //lmtm sorting
