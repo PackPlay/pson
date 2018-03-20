@@ -65,7 +65,7 @@ class Panel extends Entity {
         Panel.applyLmtm(panel.connections, item => Util.midpoint(item.panel.outer, pivot))
             .forEach(e => {
                 // build children
-                let r = Panel._buildGraph(panels, e.panel, checkpoints, current);
+                let r = Panel._buildGraph(panels, e.panel, checkpoints, connectionMetadata, current);
                 if(r) {
                     current.children.push(r);
                 }
