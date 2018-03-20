@@ -53,7 +53,7 @@ class Panel extends Entity {
 
             // assign metadata to this 
             if(connection) {
-                _.extend(current, DEFAULT_CONNECTION_DATA, _.omit(connection, ['a', 'b']));
+                _.extend(current, DEFAULT_CONNECTION_DATA, _.omit(connection, ['panels']));
             }
             else {
                 throw new Error('Cannot find connection for ' + panels.indexOf(current.panel) + ' ' + panels.indexOf(parent.panel));
