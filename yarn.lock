@@ -2,6 +2,23 @@
 # yarn lockfile v1
 
 
+"@turf/centroid@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/centroid/-/centroid-6.0.0.tgz#f2220cca5dd90b37b10ad3a03b5c240d922edab8"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
+"@turf/helpers@6.x", "@turf/helpers@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.1.1.tgz#b7cb68f653beefd2fad603c8602f7e6a8b016f0c"
+
+"@turf/meta@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.1.tgz#cf6f3f2263a3d24fc8d6a7e90f0420bbc44c090d"
+  dependencies:
+    "@turf/helpers" "6.x"
+
 "@types/node@^9.4.5":
   version "9.4.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"

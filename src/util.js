@@ -1,8 +1,58 @@
 const _ = require('lodash');
 const Point = require('./Point');
+const {polygon} = require('@turf/helpers');
+const centroid = require('@turf/centroid');
 let md5 = require('md5');
 
 class Util {
+    static arrangeGroup(group) {
+        if(group.length <= 1) return group;
+        let arrange = []; // orderly array
+        let arr = group.slice();
+        let len = group.length;
+        let n = 0;
+        
+        arrange.push(arr.shift());
+    
+        // after
+        while(arr.length > 0) {
+            let c = arr.pop();
+            let first = arrange[0];
+            let last = arrange[arrange.length-1];
+            
+            if(first !== c) {
+                if(first.a.equals(c.a)) {
+                    c.swap();
+                    arrange.unshift(c);
+                    continue;
+                } 
+                else if(first.a.equals(c.b)) {
+                    arrange.unshift(c);
+                    continue;
+                }     
+            }
+            if(last !== c) {
+                if(last.b.equals(c.a)) {
+                    arrange.push(c);
+                    continue;
+                } else if(last.b.equals(c.b)) {
+                    c.swap();
+                    arrange.push(c);
+                    continue;
+                }
+            }
+    
+            arr.unshift(c);
+            n++;
+            
+            if(n > len * len) {
+                console.log(arr, arrange);
+                throw new Error('tries exceed len^2 of len=' + len);
+            }
+        }
+    
+        return arrange;
+    }
     static hash(o) {
         return md5(o);
     }
@@ -19,14 +69,11 @@ class Util {
     }
     // refer to wiki
     static centroid(segments, pivot) {
-        let all = _.flatten(segments.map((e,i) => {
-            let r = e.interpolate();
-            return (i !== segments.length - 1) ? r.slice(0, r.length-1) : r;
-        }));
-        let a = Util.signedArea(all);
-        let x = Util.signedArea(all, (a,b) => a.x + b.x);
-        let y = Util.signedArea(all, (a,b) => a.y + b.y);
-        return new Point( x / (6*a), y / (6*a) );
+        let all = _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)))
+            .map(e => [e.x, e.y]);
+        let poly = polygon([all]);
+        let point = centroid(poly).geometry.coordinates;
+        return new Point( point[0], point[1] );
     }
     static midpoint(segments, pivot) {
         let all = _.flatten(segments.map(e => {
