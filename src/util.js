@@ -8,9 +8,10 @@ class Util {
     }
     static midpoint(segments, pivot) {
         let all = _.flatten(segments.map(e => {
-            let n = e.interpolate()
-            return n.slice(0, n.length-1);
+            return e.interpolate()
         }));
+
+        all = _.uniqWith(all, (a,b) => a.equals(b));
         
         // average midpoint
         let s = _.reduce(all, (sum, n) => {
