@@ -109,7 +109,7 @@ const pson = {
     Arc: require('./src/Arc'),
     Panel: require('./src/Panel'),
     Pson: require('./src/Pson'),
-    Util: require('./src/Util'),
+    Util: require('./src/util'),
     
     test: [
         require('./test/sample0.json'),
