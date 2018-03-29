@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Point = require('./Point');
 const {polygon} = require('@turf/helpers');
-const centroid = require('@turf/centroid');
+const centroid = require('@turf/centroid').default;
 let md5 = require('md5');
 
 class Util {
@@ -69,7 +69,8 @@ class Util {
     }
     // refer to wiki
     static centroid(segments, pivot) {
-        let all = _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)))
+        let arranged = Util.arrangeGroup(segments);
+        let all = _.flatten(arranged.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)))
             .map(e => [e.x, e.y]);
         let poly = polygon([all]);
         let point = centroid(poly).geometry.coordinates;
