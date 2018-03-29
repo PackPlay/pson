@@ -7,14 +7,22 @@ class Util {
         return md5(o);
     }
     static midpoint(segments, pivot) {
-        let all = _.flatten(segments.map(e => e.interpolate(5).slice(0, -1)));
+        let all = _.flatten(segments.map(e => {
+            let n = e.interpolate()
+            return n.slice(0, n.length-1);
+        }));
         
+        // average midpoint
         let s = _.reduce(all, (sum, n) => {
-            sum.x += n.x / all.length;
-            sum.y += n.y / all.length; 
+            sum.x += n.x;
+            sum.y += n.y;
             return sum;
         }, new Point(0,0));
 
+        s.x /= all.length;
+        s.y /= all.length;
+
+        // if any pivots
         if(pivot) {
             s.x -= pivot.x;
             s.y -= pivot.y;
