@@ -5,7 +5,7 @@ const Util = require('./util.js');
 const uuid = require('uuid/v4');
 
 const DEFAULT_CONNECTION_DATA = {
-    angle: 1
+    angle: 1.0
 };
 
 class Panel extends Entity {
@@ -53,7 +53,7 @@ class Panel extends Entity {
 
             // assign metadata to this 
             if(connection) {
-                _.extend(current, DEFAULT_CONNECTION_DATA, _.omit(connection, ['panels']));
+                current.data = _.extend({}, DEFAULT_CONNECTION_DATA, _.omit(connection, ['panels']));
             }
             else {
                 throw new Error('Cannot find connection for ' + panels.indexOf(current.panel) + ' ' + panels.indexOf(parent.panel));
