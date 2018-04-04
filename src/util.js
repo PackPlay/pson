@@ -67,6 +67,24 @@ class Util {
         }
         return sum/2;
     }
+
+    // get bounding box midpoint
+    static bbMidpoint(segments) {
+        let all = _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)));
+        let minX = all[0].x;
+        let maxX = all[0].x;
+        let minY = all[0].y;
+        let maxY = all[0].y;
+
+        all.forEach(({x,y}) => {
+            if(x < minX) minX = x;
+            if(x > maxX) maxX = x;
+            if(y < minY) minY = y;
+            if(y > maxY) maxY = y;
+        });
+
+        return new Point((maxX + minX)/2, (maxY + minY)/2);
+    }
     // refer to wiki
     static centroid(segments, pivot) {
         let arranged = Util.arrangeGroup(segments);
