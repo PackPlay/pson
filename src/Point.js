@@ -51,6 +51,9 @@ class Point extends Entity{
     toString() {
         return `(${this.x}, ${this.y})`;
     }
+    toArray() {
+        return [this.x, this.y];
+    }
 }
 
 
