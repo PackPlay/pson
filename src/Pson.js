@@ -23,6 +23,7 @@ class Pson {
         this.cut = [];
         this.crease = [];
         this.bone = [];
+        this.group = {};
         this.metadata = {};
         this.panels = [];
 
@@ -35,6 +36,7 @@ class Pson {
         this.cut = [];
         this.crease = [];
         this.bone = [];
+        this.group = {};
         this.metadata = {};
         this.panels = [];
         this.entities = [];
