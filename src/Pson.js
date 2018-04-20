@@ -189,6 +189,12 @@ class Pson {
                             return this.getEntityById(r);
                         return r;
                     });
+                } else {
+                    this[k] = Pson.mapNotObject(v, (r, path) => {
+                        if(!path.endsWith('.id'))
+                            return this.getEntityById(r);
+                        return r;
+                    });
                 }
             }
         });
