@@ -129,7 +129,7 @@ class Panel extends Entity {
             panels: {
                 root: 0,
                 method: 'lmtm',
-                data: panels.map(e => {})    
+                data: panels.map(e => ({}))    
             },
             connections: Panel.getConnections(panels)
         };
