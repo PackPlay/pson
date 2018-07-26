@@ -102,6 +102,39 @@ class Panel extends Entity {
             .map( ({ data }) => data );
     }
 
+    static getConnections(panels) {
+        let connections = [];
+        panels.forEach((panel, i) => {
+            panel.connections.forEach((connection) => {
+                let j = _.findIndex(panels, ({hash}) => hash === connection.panel.hash);
+                
+                if(connections.filter(e => e.panels.indexOf(i) >= 0 && e.panels.indexOf(j) >= 0).length <= 0) {
+                    // sort by ascend
+                    if(i > j) {
+                        let k = j;
+                        j = i;
+                        i = k;
+                    }
+                    connections.push({
+                        panels: [i,j]
+                    });
+                }
+            });
+        });
+
+        return connections;
+    }
+    static getEmptyMetadata(panels) {
+        return {
+            panels: {
+                root: 0,
+                method: 'lmtm',
+                data: panels.map(e => {})    
+            },
+            connections: Panel.getConnections(panels)
+        };
+    }
+
     centroid() {
         return Util.bbMidpoint(this.outer);
     }
