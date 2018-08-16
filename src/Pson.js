@@ -199,6 +199,10 @@ class Pson {
             }
         });
     }
+    removeDuplicate() {
+        this.cut = _.uniqWith(this.cut, (a,b) => a.equals(b));
+        this.crease = _.uniqWith(this.crease, (a,b) => a.equals(b));
+    }
 
     static createEntityFromData(object, options={}) {
         // preexisting entity container
