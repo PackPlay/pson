@@ -102,7 +102,7 @@ class Arc extends Entity{
         this.b = t;
         this.ccw = !this.ccw;
     }
-    interpolate(samplingSize=12) {
+    interpolate(samplingSize=24) {
         let a = this.ccw ? this.a : this.b;
         let b = this.ccw ? this.b : this.a;
         let startRad = Math.atan2(a.y - this.center.y, a.x - this.center.x);
@@ -116,11 +116,13 @@ class Arc extends Entity{
         let dRad = (endRad - startRad) / samplingSize;
         let points = [];
         
-        for(let i = 0; i < samplingSize+1; i++) {
+        for(let i = 1; i < samplingSize; i++) {
             let x = this.center.x + this.radius * Math.cos(dRad * i + startRad);
             let y = this.center.y + this.radius * Math.sin(dRad * i + startRad)
             points.push(new Point(x,y));
         }
+        points.unshift(a);
+        points.push(b);
         
         return this.ccw ? points : _.reverse(points);
     }
