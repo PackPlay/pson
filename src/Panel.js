@@ -87,7 +87,7 @@ class Panel extends Entity {
 
         // sort by bounding box border points
         if(method === 'border') {
-            let segments = panels.reduce((e, sum) => sum.concat(e.outer), []);
+            let segments = panels.reduce((sum, e) => sum.concat(e.outer), []);
             let bbox = Util.bbox(segments);
             let width = bbox.maxX - bbox.minX;
             let height = bbox.maxY - bbox.minY;
