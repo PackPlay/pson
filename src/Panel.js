@@ -3,6 +3,7 @@ const almostEqual = require('almost-equal');
 const Entity = require('./Entity');
 const Util = require('./util.js');
 const uuid = require('uuid/v4');
+const Point = require('./Point');
 
 const DEFAULT_CONNECTION_DATA = {
     angle: 1.0
@@ -32,7 +33,7 @@ class Panel extends Entity {
     }
 
     // use lmtm algorithm
-    static _buildGraph(panels, panel, checkpoints, connectionMetadata, parent) {
+    static _buildGraph(panels, panel, checkpoints, connectionMetadata, parent, sorting) {
         if(_.includes(checkpoints, panel.hash)) {
             return null;
         }
@@ -61,11 +62,10 @@ class Panel extends Entity {
         }
 
         // sort by lmtm rule
-        let pivot = Util.centroid(current.panel.outer);
-        Panel.applyLmtm(panel.connections, item => Util.centroid(item.panel.outer, pivot))
+        Panel.sort(panel.connections, sorting)
             .forEach(e => {
                 // build children
-                let r = Panel._buildGraph(panels, e.panel, checkpoints, connectionMetadata, current);
+                let r = Panel._buildGraph(panels, e.panel, checkpoints, connectionMetadata, current, sorting);
                 if(r) {
                     current.children.push(r);
                 }
@@ -76,30 +76,28 @@ class Panel extends Entity {
 
     // build graph procedurally from metadata
     static buildGraph(panels, rootIndex, metadata) {
-        let { connections = null }  = metadata;
+        let { connections = null, sorting }  = metadata;
         let root = panels[rootIndex];
-        return Panel._buildGraph(panels, root, [], connections);
+        return Panel._buildGraph(panels, root, [], connections, sorting);
     }
 
     // sort panels by lmtm rule
-    static applyLmtm(panels, transformFn) {
-        return panels.slice()
-            .map( e => ({ ...transformFn(e), data: e }) ) // get midpoint or whatever
-            .sort( (a, b) => { //lmtm sorting
-                if(a.x < b.x) {
-                    return -1;
-                } else if(a.x > b.x) {
-                    return 1;
-                } else if(almostEqual(a.x, b.x, 0.0001)) {
-                    if(a.y > b.y) {
-                        return -1;
-                    } else if(a.y < b.y) {
-                        return 1;
-                    }
-                }
-                return 0;
-            })
-            .map( ({ data }) => data );
+    static sort(panels, {method, args}) {
+        let ps = panels.slice();
+
+        // sort by bounding box border points
+        if(method === 'border') {
+            let segments = panels.reduce((e, sum) => sum.concat(e.outer), []);
+            let bbox = Util.bbox(segments);
+            let width = bbox.maxX - bbox.minX;
+            let height = bbox.maxY - bbox.minY;
+            let borderPoint = new Point(bbox.minX + width * args[0], bbox.maxX + height * args[1]);
+            
+            ps.sort((a,b) => a.centroid().distance2(borderPoint) - b.centroid().distance2(borderPoint));
+        } else {
+            throw new Error('panel sorting method "' + method + '" not found');
+        }
+        return ps;
     }
 
     static getConnections(panels) {
@@ -128,7 +126,10 @@ class Panel extends Entity {
         return {
             panels: {
                 root: 0,
-                method: 'lmtm',
+                sorting: {
+                    method: 'border',
+                    args: [0,0]
+                },
                 data: panels.map(e => ({}))    
             },
             connections: Panel.getConnections(panels)

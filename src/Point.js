@@ -15,7 +15,7 @@ class Point extends Entity{
         this.y = roundTo(y, 6);
     }
     distance2(b) {
-        return Point.distance(this, b);
+        return Point.distance2(this, b);
     }
     distance(b) {
         return Point.distance(this, b);
