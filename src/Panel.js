@@ -91,7 +91,7 @@ class Panel extends Entity {
             let bbox = Util.bbox(segments);
             let width = bbox.maxX - bbox.minX;
             let height = bbox.maxY - bbox.minY;
-            let borderPoint = new Point(bbox.minX + width * args[0], bbox.maxX + height * args[1]);
+            let borderPoint = new Point(bbox.minX + width * args[0], bbox.minY + height * args[1]);
             
             ps.sort((a,b) => a.centroid().distance2(borderPoint) - b.centroid().distance2(borderPoint));
         } else {
