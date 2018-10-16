@@ -111,7 +111,7 @@ class Panel extends Entity {
                 
                 // get all unexplored children
                 let children = r.connections
-                    .filter(e => sorted.indexOf(e) < 0)
+                    .filter(e => sorted.indexOf(e.panel) < 0)
                     .map(e => ({
                         centroid: e.panel.centroid(),
                         panel: e.panel
