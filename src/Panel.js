@@ -76,7 +76,7 @@ class Panel extends Entity {
 
     // build graph procedurally from metadata
     static buildGraph(panels, rootIndex, metadata) {
-        let { connections = null, sorting }  = metadata;
+        let { connections = null, panels: {sorting} }  = metadata;
         let root = panels[rootIndex];
         return Panel._buildGraph(panels, root, [], connections, sorting);
     }
