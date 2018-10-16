@@ -94,7 +94,11 @@ class Panel extends Entity {
             let borderPoint = new Point(bbox.minX + width * args[0], bbox.minY + height * args[1]);
             
             ps.sort((a,b) => a.centroid().distance2(borderPoint) - b.centroid().distance2(borderPoint));
-        } else {
+        } 
+        else if(method === '') {
+            
+        }
+        else {
             throw new Error('panel sorting method "' + method + '" not found');
         }
         return ps;

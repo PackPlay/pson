@@ -4,6 +4,7 @@ const Entity = require('./Entity');
 const Panel = require('./Panel');
 const Line = require('./Line');
 const Point = require('./Point');
+const DatumPoint = require('./DatumPoint');
 const Arc = require('./Arc');
 const util = require('./util');
 
@@ -88,7 +89,7 @@ class Pson {
         _.forOwn(this, (v, k) => {
             if(k !== 'entities' && _.isArray(v)) {
                 // console.log('pruning', v);
-                this[k] = _.filter(v, e => e.className !== 'Point'); //quickfix: prune out Points 
+                this[k] = _.filter(v, e => e.className !== 'Point' && e.className !== 'DatumPoint'); //quickfix: prune out Points 
             }
         });
 
@@ -156,7 +157,7 @@ class Pson {
     }
     unpackEntities() {
         this.entities = _.map(this.entities, e => {
-            if(e.className === 'Point')
+            if(e.className === 'Point' || e.className === 'DatumPoint')
                 return Pson.createEntityFromData(e);
             return e;
         });
@@ -214,6 +215,8 @@ class Pson {
 
         if(className === 'Point') {
             o = new Point(object.x, object.y);
+        } else if(className === 'DatumPoint') {
+            o = new DatumPoint(object.x, object.y, object.data);
         } else if(className === 'Arc') {
             o = new Arc(object.a, object.b, object.center, object.radius, object.ccw);
         } else if(className === 'Line') {
