@@ -27,6 +27,7 @@ class Pson {
         this.group = {};
         this.metadata = {};
         this.panels = [];
+        this.data = [];
 
         if(json) {
             this.read(json);
@@ -41,6 +42,7 @@ class Pson {
         this.metadata = {};
         this.panels = [];
         this.entities = [];
+        this.data = [];
     }
 
     /**
@@ -81,18 +83,34 @@ class Pson {
         if(unpack) {
             this.unpackEntities();
         } else {
+            this.data = [];
             _.forOwn(this, (v, k) => {
-                this[k] = Pson.map(v, e => Pson.createEntityFromData(e));
+                this[k] = Pson.map(v, e => {
+                    let r = Pson.createEntityFromData(e)
+                    if(r.className === 'DatumPoint') {
+                        console.log('found');
+                        this.data.push(r);
+                    }
+                    return r;
+                });
             });
+
+            this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
         }
+
+        // datum layer
+
+        console.log('r0data', this.data);
+
         // pruning out Point in segments
         _.forOwn(this, (v, k) => {
-            if(k !== 'entities' && _.isArray(v)) {
+            if(k !== 'entities' && k !== 'data' && _.isArray(v)) {
                 // console.log('pruning', v);
                 this[k] = _.filter(v, e => e.className !== 'Point' && e.className !== 'DatumPoint'); //quickfix: prune out Points 
             }
         });
 
+        console.log('rdata', this.data);
         console.log('read');
         return this;
     }
@@ -217,6 +235,7 @@ class Pson {
             o = new Point(object.x, object.y);
         } else if(className === 'DatumPoint') {
             o = new DatumPoint(object.x, object.y, object.data);
+            console.log('datum', o)
         } else if(className === 'Arc') {
             o = new Arc(object.a, object.b, object.center, object.radius, object.ccw);
         } else if(className === 'Line') {
