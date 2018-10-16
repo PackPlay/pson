@@ -62,10 +62,10 @@ class Panel extends Entity {
         }
 
         // sort by lmtm rule
-        Panel.sort(panel.connections, sorting)
+        Panel.sort(panel.connections.map(e => e.panel), sorting)
             .forEach(e => {
                 // build children
-                let r = Panel._buildGraph(panels, e.panel, checkpoints, connectionMetadata, current, sorting);
+                let r = Panel._buildGraph(panels, e, checkpoints, connectionMetadata, current, sorting);
                 if(r) {
                     current.children.push(r);
                 }
@@ -82,7 +82,7 @@ class Panel extends Entity {
     }
 
     // sort panels by lmtm rule
-    static sort(panels, {method, args}) {
+    static sort(panels, {method, args}, fn) {
         let ps = panels.slice();
 
         // sort by bounding box border points
