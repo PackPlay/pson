@@ -62,7 +62,7 @@ class Panel extends Entity {
         }
 
         // sort by lmtm rule
-        Panel.sort(panel.connections.map(e => e.panel), sorting)
+        panel.connections.map(e => e.panel)
             .forEach(e => {
                 // build children
                 let r = Panel._buildGraph(panels, e, checkpoints, connectionMetadata, current, sorting);
@@ -81,22 +81,56 @@ class Panel extends Entity {
         return Panel._buildGraph(panels, root, [], connections, null, sorting);
     }
 
-    // sort panels by lmtm rule
-    static sort(panels, {method, args}, fn) {
+    // sort panels by rules
+    static sort(panels, {method, args}) {
         let ps = panels.slice();
 
         // sort by bounding box border points
-        if(method === 'border') {
-            let segments = panels.reduce((sum, e) => sum.concat(e.outer), []);
-            let bbox = Util.bbox(segments);
-            let width = bbox.maxX - bbox.minX;
-            let height = bbox.maxY - bbox.minY;
-            let borderPoint = new Point(bbox.minX + width * args[0], bbox.minY + height * args[1]);
+        // if(method === 'border') {
+        //     let segments = panels.reduce((sum, e) => sum.concat(e.outer), []);
+        //     let bbox = Util.bbox(segments);
+        //     let width = bbox.maxX - bbox.minX;
+        //     let height = bbox.maxY - bbox.minY;
+        //     let borderPoint = new Point(bbox.minX + width * args[0], bbox.minY + height * args[1]);
             
-            ps.sort((a,b) => a.centroid().distance2(borderPoint) - b.centroid().distance2(borderPoint));
-        } 
-        else if(method === '') {
-            
+        //     ps.sort((a,b) => a.centroid().distance2(borderPoint) - b.centroid().distance2(borderPoint));
+        // } 
+        if(true) {
+            let sorted = [];
+            let root = ps.filter(p => p.isRoot)[0];
+            let stack = [root];
+
+            if(!root) {
+                throw new Error('root is not found');
+            }
+
+            while(stack.length > 0) {
+                let r = stack.pop();
+                let pivot = r.centroid();
+                sorted.push(r);
+                
+                // get all unexplored children
+                let children = r.connections
+                    .filter(e => sorted.indexOf(e) < 0)
+                    .map(e => ({
+                        centroid: e.panel.centroid(),
+                        panel: e.panel
+                    }));
+
+                // sort by angle
+                children.sort((a,b) => Math.atan2(a.centroid.y - pivot.y, a.centroid.x - pivot.x) - Math.atan2(b.centroid.y - pivot.y, b.centroid.x - pivot.x));
+
+                // add to stack
+                children.forEach(e => stack.push(e.panel));
+            }
+
+            if(sorted.length !== ps.length) {
+                console.log(sorted.length, sorted);
+                console.log(ps.length, ps);
+                throw new Error('sorted preroot somehow do not have same length as full array');
+            }
+
+            ps = sorted;
         }
         else {
             throw new Error('panel sorting method "' + method + '" not found');
@@ -131,8 +165,7 @@ class Panel extends Entity {
             panels: {
                 root: 0,
                 sorting: {
-                    method: 'border',
-                    args: [0,0]
+                    method: 'preroot'
                 },
                 data: panels.map(e => ({}))    
             },
