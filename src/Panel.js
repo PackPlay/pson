@@ -174,7 +174,7 @@ class Panel extends Entity {
     }
 
     centroid() {
-        return Util.bbMidpoint(this.outer);
+        return Util.centroid(this.outer);
     }
  
     equals(p) {
