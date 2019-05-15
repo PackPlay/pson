@@ -87,7 +87,7 @@ class Util {
     // pivot is optional, use bbox center as default
     static isCCW(loop, pivot) {
         if(!pivot) {
-            pivot = Util.bbMidpoint(group);
+            pivot = Util.bbMidpoint(loop);
         }
         let all = Util.flattenLoop(loop)
             .map(e => e.subtract(pivot));
