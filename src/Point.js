@@ -39,6 +39,9 @@ class Point extends Entity{
     dot(b) {
         return this.x * b.x + this.y * b.y;
     }
+    cross(b) {
+        return this.x * b.y - this.y * b.x;
+    }
     is(p) {
         return almostEqual(this.distance(p), 0);
     }

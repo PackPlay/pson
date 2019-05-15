@@ -64,7 +64,7 @@ class Pson {
      * Read to Container
      * @param {*String|Object} json 
      */
-    read(json, unpack=true) {
+    read(json, unpack=true, options={}) {
         this.reset();
         if(_.isString(json)) {
             json = JSON.parse(json);
@@ -81,12 +81,12 @@ class Pson {
 
         // unpack entities to objects
         if(unpack) {
-            this.unpackEntities();
+            this.unpackEntities(options);
         } else {
             this.data = [];
             _.forOwn(this, (v, k) => {
                 this[k] = Pson.map(v, e => {
-                    let r = Pson.createEntityFromData(e)
+                    let r = Pson.createEntityFromData(e, options.entity)
                     if(r.className === 'DatumPoint') {
                         console.log('found');
                         this.data.push(r);
@@ -97,10 +97,6 @@ class Pson {
 
             this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
         }
-
-        // datum layer
-
-        console.log('r0data', this.data);
 
         // pruning out Point in segments
         _.forOwn(this, (v, k) => {
@@ -156,7 +152,7 @@ class Pson {
         });
 
         _.forEach(this.entities, (e, i) => {
-            e.id = 'e-'+i;
+            e.id = e.className+'-'+i;
         });
         this.entities = _.map(this.entities, e => Pson.map(e, (c, path) => {
             if(path === '') {
@@ -173,10 +169,10 @@ class Pson {
         });
         // console.log('entities', this.entities);
     }
-    unpackEntities() {
+    unpackEntities(options={}) {
         this.entities = _.map(this.entities, e => {
             if(e.className === 'Point' || e.className === 'DatumPoint')
-                return Pson.createEntityFromData(e);
+                return Pson.createEntityFromData(e, options.entity);
             return e;
         });
         let atomic = this.entities.filter(e => e instanceof Entity);
@@ -188,7 +184,7 @@ class Pson {
             }
             return r;
         });
-        this.entities = _.map(this.entities, e => Pson.createEntityFromData(e));
+        this.entities = _.map(this.entities, e => Pson.createEntityFromData(e, options.entity));
         this.entities = Pson.mapNotObject(this.entities, (r, path) => {
             if(!path.endsWith('.id'))
                 return this.getEntityById(r);

@@ -5,7 +5,8 @@ const centroid = require('@turf/centroid').default;
 let md5 = require('md5');
 
 class Util {
-    static arrangeGroup(group) {
+    // arrange segments such that endpoint of nth is connected to startpoint of (n+1)th... etc
+    static arrangeGroup(group, ccw) {
         if(group.length <= 1) return group;
         let arrange = []; // orderly array
         let arr = group.slice();
@@ -47,11 +48,64 @@ class Util {
             
             if(n > len * len) {
                 console.log(arr, arrange);
-                throw new Error('tries exceed len^2 of len=' + len);
+                throw new Error('tries exceed len^2 of len=' + len + ' and no next segment is found. Maybe these segments are not connected');
+            }
+        }
+
+        if(!_.isUndefined(ccw)) {
+            if(!Util.isCCW(arrange)) {
+                arrange = Util.reverseGroup(arrange);
             }
         }
     
         return arrange;
+    }
+
+    // reverse group of segments orientation (CCW or CW)
+    static reverseGroup(group) {
+        if(group.length <= 1) return group;
+        let arrange = [];
+
+        // reverse order
+        for(let i = group.length-1; i >= 0; i++) {
+            group[i].swap();
+            arrange.push(group[i]);
+        }
+
+        return group;
+    }
+
+    // convert group of segments to array of points
+    static flattenLoop(loop, sampleFn) {
+        if(!sampleFn) {
+            sampleFn = () => undefined;
+        }
+        return Util.flattenLoop(loop);
+    }
+
+    // check if a group of segments are aligned in CCW orientation
+    // pivot is optional, use bbox center as default
+    static isCCW(loop, pivot) {
+        if(!pivot) {
+            pivot = Util.bbMidpoint(group);
+        }
+        let all = Util.flattenLoop(loop)
+            .map(e => e.subtract(pivot));
+        let checksum = [];
+        // fast check
+        for(let i = 0; i < all.length-1; i++) {
+            // positive means ccw from i to i+1
+            checksum.push(all[i].cross(all[i+1]));
+        }
+
+        let ccw = checksum.all(e => e > 0);
+        let cw = checksum.all(e => e < 0); //fail check
+
+        if(!ccw && !cw) {
+            console.error(checksum);
+            throw new Error('CCW check gives unstable result, somehow orientation of the loop is neither CCW nor CW');
+        }
+        return ccw;
     }
     static hash(o) {
         return md5(o);
@@ -126,12 +180,12 @@ class Util {
             return sum;
         }, new Point(0,0));
 
-        s.x /= all.length;
-        s.y /= all.length;
-
-        // if any pivots
-        if(pivot) {
-            s.x -= pivot.x;
+    lockwise/counter-clockwise    s.x /= all.length;
+    lockwise/counter-clockwise    s.y /= all.length;
+lockwise/counter-clockwise
+    lockwise/counter-clockwise    // if any pivots
+    lockwise/counter-clockwise    if(pivot) {
+    lockwise/counter-clockwise        s.x -= pivot.x;
             s.y -= pivot.y;
         }
         return new Point(s.x, s.y);
