@@ -98,8 +98,8 @@ class Util {
             checksum.push(all[i].cross(all[i+1]));
         }
 
-        let ccw = checksum.all(e => e > 0);
-        let cw = checksum.all(e => e < 0); //fail check
+        let ccw = checksum.every(e => e > 0);
+        let cw = checksum.every(e => e < 0); //fail check
 
         if(!ccw && !cw) {
             console.error(checksum);
