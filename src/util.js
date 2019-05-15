@@ -180,12 +180,12 @@ class Util {
             return sum;
         }, new Point(0,0));
 
-    lockwise/counter-clockwise    s.x /= all.length;
-    lockwise/counter-clockwise    s.y /= all.length;
-lockwise/counter-clockwise
-    lockwise/counter-clockwise    // if any pivots
-    lockwise/counter-clockwise    if(pivot) {
-    lockwise/counter-clockwise        s.x -= pivot.x;
+        s.x /= all.length;
+        s.y /= all.length;
+
+        // if any pivots
+        if(pivot) {
+            s.x -= pivot.x;
             s.y -= pivot.y;
         }
         return new Point(s.x, s.y);
