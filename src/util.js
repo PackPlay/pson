@@ -67,7 +67,7 @@ class Util {
         let arrange = [];
 
         // reverse order
-        for(let i = group.length-1; i >= 0; i++) {
+        for(let i = group.length-1; i >= 0; i--) {
             group[i].swap();
             arrange.push(group[i]);
         }
