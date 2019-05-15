@@ -76,11 +76,11 @@ class Util {
     }
 
     // convert group of segments to array of points
-    static flattenLoop(loop, sampleFn) {
+    static flattenLoop(segments, sampleFn) {
         if(!sampleFn) {
             sampleFn = () => undefined;
         }
-        return Util.flattenLoop(loop);
+        return _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate(sampleFn(e)) : e.interpolate(sampleFn(e)).slice(0, -1)));
     }
 
     // check if a group of segments are aligned in CCW orientation
@@ -124,7 +124,7 @@ class Util {
 
     // get bounding box midpoint
     static bbMidpoint(segments) {
-        let all = _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)));
+        let all = Util.flattenLoop(segments);
         let minX = all[0].x;
         let maxX = all[0].x;
         let minY = all[0].y;
@@ -142,7 +142,7 @@ class Util {
 
     // get bounding box midpoint
     static bbox(segments) {
-        let all = _.flatten(segments.map((e, i, arr) => i === arr.length-1 ? e.interpolate() : e.interpolate().slice(0, -1)));
+        let all = Util.flattenLoop(segments);
         let minX = all[0].x;
         let maxX = all[0].x;
         let minY = all[0].y;
