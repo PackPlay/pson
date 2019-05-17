@@ -108,9 +108,10 @@ round-to@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/round-to/-/round-to-2.0.0.tgz#bcef4f2bcafd9480902c2142150b28c897f03e37"
 
-svg-intersections@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/svg-intersections/-/svg-intersections-0.3.2.tgz#7d1b72e871550959f3c79625a7bcceabd365ddc7"
+svg-intersections@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/svg-intersections/-/svg-intersections-0.4.0.tgz#1d491530988974b1923d04a10bd59cc04ec150ff"
+  integrity sha512-w/OhJFvOlpy8Qyf+IuNB6uk3EhwkzHzrbqnbD8ktgvVf3zk+VotPWOsUQtYOV9zSLEYWq0jFEh/uah/qVSzMiQ==
   dependencies:
     kld-affine "2.0.0"
     kld-polynomial "0.1.1"

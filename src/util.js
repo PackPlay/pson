@@ -3,7 +3,28 @@ const Point = require('./Point');
 const {polygon} = require('@turf/helpers');
 const centroid = require('@turf/centroid').default;
 let md5 = require('md5');
+class BoundingBox {
+    constructor(minX, maxX, minY, maxY) {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+    }
 
+    contains(points, inclusive=true) {
+        if(points instanceof Points) {
+            points = [points];
+        }
+
+        return points.every(p => {
+            if(inclusive) {
+                return p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY; 
+            } else {
+                return p.x > minX && p.x < maxX && p.y > minY && p.y < maxY; 
+            }
+        })
+    }
+}
 class Util {
     // arrange segments such that endpoint of nth is connected to startpoint of (n+1)th... etc
     static arrangeGroup(group, ccw) {
@@ -155,7 +176,7 @@ class Util {
             if(y > maxY) maxY = y;
         });
 
-        return {minX, maxX, minY, maxY};
+        return new BoundingBox(minX, maxX, minY, maxY);
     }
     // refer to wiki
     static centroid(segments, pivot) {

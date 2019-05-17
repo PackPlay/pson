@@ -1,3 +1,6 @@
+## [1.0.7] - 2019-05-17
+### Added
+- BoundingBox class
 ## [1.0.6] - 2019-05-15
 ### Added
 - CHANGELOG.md
