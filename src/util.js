@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Point = require('./Point');
+const almostEqual = require('almost-equal');
 const {polygon} = require('@turf/helpers');
 const centroid = require('@turf/centroid').default;
 let md5 = require('md5');
@@ -11,18 +12,15 @@ class BoundingBox {
         this.maxY = maxY;
     }
 
-    contains(points, inclusive=true) {
+    contains(points) {
         if(points instanceof Points) {
             points = [points];
         }
 
-        return points.every(p => {
-            if(inclusive) {
-                return p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY; 
-            } else {
-                return p.x > minX && p.x < maxX && p.y > minY && p.y < maxY; 
-            }
-        })
+        return points.every(p => (p.x >= minX || almostEqual(p.x, minX))
+            && (p.x <= maxX || almostEqual(p.x, maxX)) 
+            && (p.y >= minY || almostEqual(p.y, minY))
+            && (p.y <= maxY || almostEqual(p.x, maxY)));
     }
 }
 class Util {
