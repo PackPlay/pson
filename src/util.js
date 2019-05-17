@@ -13,7 +13,7 @@ class BoundingBox {
     }
 
     contains(points) {
-        if(points instanceof Points) {
+        if(points instanceof Point) {
             points = [points];
         }
 
