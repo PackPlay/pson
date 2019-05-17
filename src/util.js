@@ -17,10 +17,10 @@ class BoundingBox {
             points = [points];
         }
 
-        return points.every(p => (p.x >= minX || almostEqual(p.x, minX))
-            && (p.x <= maxX || almostEqual(p.x, maxX)) 
-            && (p.y >= minY || almostEqual(p.y, minY))
-            && (p.y <= maxY || almostEqual(p.x, maxY)));
+        return points.every(p => (p.x >= this.minX || almostEqual(p.x, this.minX))
+            && (p.x <= this.maxX || almostEqual(p.x, this.maxX)) 
+            && (p.y >= this.minY || almostEqual(p.y, this.minY))
+            && (p.y <= this.maxY || almostEqual(p.x, this.maxY)));
     }
 }
 class Util {
