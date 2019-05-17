@@ -10,3 +10,4 @@
 
 ### Changed
 - Added optional ccw flag to `arrangeGroup`
+- Regenerate pack id only if not exists

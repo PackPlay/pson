@@ -151,9 +151,13 @@ class Pson {
             }
         });
 
+        // only regenerate if not exists
         _.forEach(this.entities, (e, i) => {
-            e.id = e.className+'-'+i;
+            if(!e.id) {
+                e.id = e.className+'-'+i;
+            }
         });
+        
         this.entities = _.map(this.entities, e => Pson.map(e, (c, path) => {
             if(path === '') {
                 return c; 
@@ -175,9 +179,11 @@ class Pson {
                 return Pson.createEntityFromData(e, options.entity);
             return e;
         });
+
+        // most basic entity obj
         let atomic = this.entities.filter(e => e instanceof Entity);
 
-        // console.log('atom', atomic);
+        // convert all id-string to entity (if found)
         this.entities = Pson.mapNotObject(this.entities, (r, path) => {
             if(!path.endsWith('.id')) {
                 return _.find(atomic, a => a.id === r) || r;
