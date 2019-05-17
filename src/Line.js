@@ -55,12 +55,14 @@ class Line extends Entity {
         let a = this.a;
         let b = this.b;
         let res = [];
-        for(let i = 0; i < sampleSize; i++) {
+        for(let i = 1; i < sampleSize-1; i++) {
             res.push(new Point(
                 a.x + (b.x-a.x) * (i / (sampleSize-1)),
                 a.y + (b.y-a.y) * (i / (sampleSize-1))
             ));
         }
+        res.unshift(this.a);
+        res.push(this.b);
         return res;
     }
 

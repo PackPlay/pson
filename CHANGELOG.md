@@ -11,3 +11,4 @@
 ### Changed
 - Added optional ccw flag to `arrangeGroup`
 - Regenerate pack id only if not exists
+- Line interpolation to return endpoint as pointers instead of copy
