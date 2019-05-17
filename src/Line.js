@@ -18,17 +18,16 @@ class Line extends Entity {
     }
     
     contains(point) {
-        let mx = this.b.x - this.a.x;
-        let my = this.b.y - this.a.y;
-        let alpha = 0;
+        let ab = this.b.subtract(this.a);
+        let ap = point.subtract(this.a);
+        let det = ab.x * ap.y - ab.y * ap.x;
 
-        if(almostEqual(my,0)) {
-            alpha = (point.x - this.a.x) / mx;
+        if(almostEqual(det, 0)) {
+            let projection = ap.dot(ab) / ab.dot(ab);
+            return projection >= 0.0 && projection <= 1.0;
         } else {
-            alpha = (point.y - this.a.y) / my;
+            return false;
         }
-
-        return alpha >= 0.0 && alpha <= 1.0;
     }
 
     dissect(point) {

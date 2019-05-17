@@ -26,6 +26,9 @@ class Point extends Entity{
     length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
+    length2() {
+        return (this.x * this.x + this.y * this.y);
+    }
     add(b) {
         return new Point(this.x + b.x, this.y + b.y);
     }
