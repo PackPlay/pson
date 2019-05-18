@@ -91,7 +91,7 @@ class Util {
             arrange.push(group[i]);
         }
 
-        return group;
+        return arrange;
     }
 
     // convert group of segments to array of points
