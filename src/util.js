@@ -113,8 +113,8 @@ class Util {
         let checksum = [];
         // fast check
         for(let i = 0; i < all.length; i++) {
-            t0 = all[i];
-            t1 = all[(i+1) % all.length];
+            let t0 = all[i];
+            let t1 = all[(i+1) % all.length];
             checksum.push((t1.x - t0.x) * (t1.y + t0.y));
         }
 
