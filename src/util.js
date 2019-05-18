@@ -104,27 +104,29 @@ class Util {
 
     // check if a group of segments are aligned in CCW orientation
     // pivot is optional, use bbox center as default
+    // https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
     static isCCW(loop, pivot) {
         if(!pivot) {
             pivot = Util.bbMidpoint(loop);
         }
-        let all = Util.flattenLoop(loop)
-            .map(e => e.subtract(pivot));
+        let all = Util.flattenLoop(loop);
         let checksum = [];
         // fast check
-        for(let i = 0; i < all.length-1; i++) {
-            // positive means ccw from i to i+1
-            checksum.push(all[i].cross(all[i+1]));
+        for(let i = 0; i < all.length; i++) {
+            t0 = all[i];
+            t1 = all[(i+1) % all.length];
+            checksum.push((t1.x - t0.x) * (t1.y + t0.y));
         }
 
-        let ccw = checksum.every(e => e > 0);
-        let cw = checksum.every(e => e < 0); //fail check
+        let cw = checksum.reduce((sum, n) => sum + n, 0);
+        console.log('checksum', cw);
 
-        if(!ccw && !cw) {
+        if(almostEqual(cw, 0)) {
+            console.error(all.map(e=>e.toString()));
             console.error(checksum);
-            throw new Error('CCW check gives unstable result, somehow orientation of the loop is neither CCW nor CW');
+            throw new Error('why is CCW checksum = 0?');
         }
-        return ccw;
+        return cw < 0;
     }
     static hash(o) {
         return md5(o);
