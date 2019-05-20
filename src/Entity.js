@@ -59,7 +59,7 @@ class Entity {
     }
 
     toString() {
-        return `(${id})`;
+        return `(${this.id})`;
     }
 }
 

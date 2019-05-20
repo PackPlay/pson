@@ -66,7 +66,7 @@ class Util {
             n++;
             
             if(n > len * len) {
-                console.log(arr, arrange);
+                console.log(arr.map(e=>e.toString()), arrange.map(e=>e.toString()));
                 throw new Error('tries exceed len^2 of len=' + len + ' and no next segment is found. Maybe these segments are not connected');
             }
         }
