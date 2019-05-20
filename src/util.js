@@ -119,7 +119,7 @@ class Util {
         }
 
         let cw = checksum.reduce((sum, n) => sum + n, 0);
-        console.log('checksum', cw);
+        // console.log('checksum', cw);
 
         if(almostEqual(cw, 0)) {
             console.error(all.map(e=>e.toString()));
