@@ -25,7 +25,7 @@ class BoundingBox {
 }
 class Util {
     // arrange segments such that endpoint of nth is connected to startpoint of (n+1)th... etc
-    static arrangeGroup(group, ccw=true, weakEqual=false) {
+    static arrangeGroup(group, ccw, weakEqual=false) {
         if(group.length <= 1) return group;
         let arrange = []; // orderly array
         let arr = group.slice();
