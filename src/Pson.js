@@ -220,9 +220,9 @@ class Pson {
             }
         });
     }
-    removeDuplicate() {
-        this.cut = _.uniqWith(this.cut, (a,b) => a.equals(b));
-        this.crease = _.uniqWith(this.crease, (a,b) => a.equals(b));
+    removeDuplicate(withId=false) {
+        this.cut = _.uniqWith(this.cut, (a,b) => withId ? a.id === b.id : a.equals(b));
+        this.crease = _.uniqWith(this.crease, (a,b) => withId ? a.id === b.id : a.equals(b));
     }
 
     static createEntityFromData(object, options={}) {
