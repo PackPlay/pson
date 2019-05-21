@@ -25,12 +25,13 @@ class BoundingBox {
 }
 class Util {
     // arrange segments such that endpoint of nth is connected to startpoint of (n+1)th... etc
-    static arrangeGroup(group, ccw) {
+    static arrangeGroup(group, ccw=true, weakEqual=false) {
         if(group.length <= 1) return group;
         let arrange = []; // orderly array
         let arr = group.slice();
         let len = group.length;
         let n = 0;
+        let equals = (a,b) => weakEqual ? a.id === b.id : a.equals(b);
         
         arrange.push(arr.shift());
     
@@ -41,21 +42,21 @@ class Util {
             let last = arrange[arrange.length-1];
             
             if(first !== c) {
-                if(first.a.equals(c.a)) {
+                if(equals(first.a,c.a)) {
                     c.swap();
                     arrange.unshift(c);
                     continue;
                 } 
-                else if(first.a.equals(c.b)) {
+                else if(equals(first.a,c.b)) {
                     arrange.unshift(c);
                     continue;
                 }     
             }
             if(last !== c) {
-                if(last.b.equals(c.a)) {
+                if(equals(last.b,c.a)) {
                     arrange.push(c);
                     continue;
-                } else if(last.b.equals(c.b)) {
+                } else if(equals(last.b,c.b)) {
                     c.swap();
                     arrange.push(c);
                     continue;

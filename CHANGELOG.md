@@ -4,8 +4,9 @@
 - Arbitary options to all Pson functions
 - Loop Segments util such as reverse orientation, flatten to points, check loop orientation, etc
 - BoundingBox class
-- Point.cross
-- Point.length2 (for optimization)
+- Point.cross product
+- Point.length2 no sqrt (for optimization)
+- ArrangeGroup optional comparison by id instead of value
 - Test file
 
 ### Changed
