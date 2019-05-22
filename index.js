@@ -109,6 +109,7 @@ const pson = {
     Arc: require('./src/Arc'),
     Panel: require('./src/Panel'),
     Pson: require('./src/Pson'),
+    PointSegment: require('./src/PointSegment'),
     Util: require('./src/util'),
     
     test: [

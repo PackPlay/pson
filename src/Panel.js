@@ -15,6 +15,7 @@ class Panel extends Entity {
         this.outer = outer;
         this.inner = inner;
         this.hash = hash;
+        this.name = null;
         this.connections = connections // panels connected to this panel
         this.data = {};
     }
