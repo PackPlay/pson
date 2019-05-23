@@ -8,6 +8,7 @@
 - Point.length2 no sqrt (for optimization)
 - ArrangeGroup optional comparison by id instead of value
 - Test file
+- PointSegment class for representing segment (of other class) in form of interpolated point array
 
 ### Changed
 - Added optional ccw flag to arrange group util
