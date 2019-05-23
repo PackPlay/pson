@@ -43,6 +43,14 @@ class PointSegment extends Entity {
     get b() {
         return this.points[this.points.length-1];
     }
+
+    toString() {
+        return this.points.map(e => e.toString()).join('->');
+    }
+
+    toStringId() {
+        return this.points.map(e => e.id).join('->');
+    }
 }
 
 module.exports = PointSegment;
