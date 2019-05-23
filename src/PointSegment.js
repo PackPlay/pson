@@ -20,6 +20,10 @@ class PointSegment extends Entity {
         }
     }
 
+    interpolate() {
+        return this.points.slice();
+    }
+
     // just swap points array
     swap() {
         let tmp = this.points.slice();
