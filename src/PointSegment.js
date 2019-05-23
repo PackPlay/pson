@@ -12,7 +12,7 @@ class PointSegment extends Entity {
 
         // generate id for interpolated points automatically
         if(segment.a.id && segment.b.id) {
-            let id = [segment.a.id, segment.b.id].sort((i,j) => i > j).join('-');
+            let id = [segment.a.id, segment.b.id].sort().join('_');
 
             for(let i = 1; i < this.points.length-1; i++) {
                 this.points[i].id = id + '-' + i;
