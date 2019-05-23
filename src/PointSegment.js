@@ -40,3 +40,5 @@ class PointSegment extends Entity {
         return this.points[this.points.length-1].b;
     }
 }
+
+module.exports = PointSegment;
