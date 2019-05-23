@@ -34,10 +34,10 @@ class PointSegment extends Entity {
 
     // return endpoints
     get a() {
-        return this.points[0].a;
+        return this.points[0];
     }
     get b() {
-        return this.points[this.points.length-1].b;
+        return this.points[this.points.length-1];
     }
 }
 
