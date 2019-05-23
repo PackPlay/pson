@@ -49,7 +49,7 @@ class PointSegment extends Entity {
     }
 
     toStringId() {
-        return '<' + this.originalClassName + '>' + this.points.map(e => e.id).join('->');
+        return '(' + this.originalClassName + ')' + this.points.map(e => e.id).join('->');
     }
 }
 
