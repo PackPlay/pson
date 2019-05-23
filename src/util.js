@@ -22,6 +22,10 @@ class BoundingBox {
             && (p.y >= this.minY || almostEqual(p.y, this.minY))
             && (p.y <= this.maxY || almostEqual(p.x, this.maxY)));
     }
+    
+    get center() {
+        return new Point((this.maxX - this.minX) / 2, (this.maxY - this.minY) / 2);
+    }
 }
 class Util {
     // arrange segments such that endpoint of nth is connected to startpoint of (n+1)th... etc
@@ -188,6 +192,7 @@ class Util {
         let point = centroid(poly).geometry.coordinates;
         return new Point( point[0], point[1] );
     }
+    
     static midpoint(segments, pivot) {
         let all = _.flatten(segments.map(e => {
             return e.interpolate()

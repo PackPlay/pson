@@ -178,6 +178,10 @@ class Panel extends Entity {
     centroid() {
         return Util.centroid(this.outer);
     }
+
+    bboxCenter() {
+        return Util.bbox(this.outer).center;
+    }
  
     equals(p) {
         return this.hash === p.hash;
