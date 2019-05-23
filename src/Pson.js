@@ -244,6 +244,8 @@ class Pson {
             o = new Line(object.a, object.b);
         } else if(className === 'Panel') {
             o = new Panel(object.outer, object.inner, object.hash, object.connections);
+            o.name = object.name;
+            o.data = object.data;
         } else {
             throw new Error('Unknown entity type ' + JSON.stringify(object));
         }
