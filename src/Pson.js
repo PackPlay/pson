@@ -48,11 +48,11 @@ class Pson {
     /**
      * Return json
      */
-    write(pack=true) {
+    write(pack=true, options) {
         //compacting data
         let r = '';
         if(pack) {
-            this.packEntities();
+            this.packEntities(options);
             r = JSON.stringify(this);
             this.unpackEntities(); //pack entity mutilate the obj, so we're reverting
         } else {
@@ -64,7 +64,7 @@ class Pson {
      * Read to Container
      * @param {*String|Object} json 
      */
-    read(json, unpack=true, options={uniqueBy:'value'}) {
+    read(json, unpack=true, options) {
         this.reset();
         if(_.isString(json)) {
             json = JSON.parse(json);
@@ -84,9 +84,14 @@ class Pson {
             this.unpackEntities(options);
         } else {
             this.data = [];
+            console.log('creating pson entity');
             _.forOwn(this, (v, k) => {
                 this[k] = Pson.map(v, e => {
-                    let r = Pson.createEntityFromData(e, options.entity)
+                    let r = e;
+                    console.log(k, e.id);
+                    if(!(r instanceof Entity)) {
+                        r = Pson.createEntityFromData(e, options.entity);
+                    }
                     if(r.className === 'DatumPoint') {
                         console.log('found');
                         this.data.push(r);
@@ -94,12 +99,7 @@ class Pson {
                     return r;
                 });
             });
-
-            if(options.uniqueBy === 'value') {
-                this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
-            } else if(options.uniqueBy === 'id') {
-                this.data = _.uniqWith(this.data, (a,b) => !_.isUndefined(a.id) && !_.isUndefined(b.id) && a.id === b.id);
-            }
+            this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
         }
 
         // pruning out Point in segments
@@ -116,12 +116,12 @@ class Pson {
     }
 
     // insert uniquely to entities
-    insertToEntities(entity) {
+    insertToEntities(entity, identityFn=(a,b) => { return a.isClass(b) && a.equals(b)}) {
         if(!(entity instanceof Entity)) {
             // console.log('test', entity.className);
             return entity;
         }
-        let e = this.findInEntities(entity);
+        let e = this.findInEntities(entity, identityFn);
         if(e) {
             return e;
         } else {
@@ -130,10 +130,10 @@ class Pson {
             return entity;
         }
     }
-    findInEntities(entity) {
+    findInEntities(entity, identityFn) {
         // console.log(entity);
         for(let i = 0; i < this.entities.length; i++) {
-            if(this.entities[i].isClass(entity) && this.entities[i].equals(entity)) {
+            if(identityFn(this.entities[i], entity)) {
                 return this.entities[i];
             }
         }    
@@ -144,14 +144,18 @@ class Pson {
     }
     // pack all entities into ids
     // regenerate their ids accordingly
-    packEntities() {
+    packEntities(options) {
         this.entities = [];
+        let identityFn = null;
+        if(this.metadata.generator === 'id') {
+            identityFn = (a,b) => !_.isUndefined(a.id) && !_.isUndefined(b.id) && a.id === b.id;
+        }
         // console.log(this);
 
         _.forOwn(this, (v,k) => {
             if(k !== 'entities') {
                 // console.log(k, v);
-                this[k] = Pson.map(v, e => this.insertToEntities(e));
+                this[k] = Pson.map(v, e => this.insertToEntities(e, identityFn));
             }
         });
 
