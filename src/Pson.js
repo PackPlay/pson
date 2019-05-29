@@ -88,7 +88,6 @@ class Pson {
             _.forOwn(this, (v, k) => {
                 this[k] = Pson.map(v, e => {
                     let r = e;
-                    console.log(k, e.id);
                     if(!(r instanceof Entity)) {
                         r = Pson.createEntityFromData(e, options.entity);
                     }

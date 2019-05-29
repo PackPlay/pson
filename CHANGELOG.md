@@ -1,4 +1,4 @@
-## [1.0.6] - 2019-05-15
+## [1.1.0] - 2019-05-29
 ### Added
 - CHANGELOG.md
 - Arbitary options to all Pson functions
@@ -15,3 +15,4 @@
 - Pson.packEntities to pack id only if not exists
 - Line.interpolate to return endpoint as pointers instead of copy
 - Line.contains now use a more consistence linear algorithm
+- Pson.write to pack by id
