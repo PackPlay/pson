@@ -64,7 +64,7 @@ class Pson {
      * Read to Container
      * @param {*String|Object} json 
      */
-    read(json, unpack=true, options={}) {
+    read(json, unpack=true, options={uniqueBy:'value'}) {
         this.reset();
         if(_.isString(json)) {
             json = JSON.parse(json);
@@ -95,7 +95,11 @@ class Pson {
                 });
             });
 
-            this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
+            if(options.uniqueBy === 'value') {
+                this.data = _.uniqWith(this.data, (a,b) => a.equals(b));
+            } else if(options.uniqueBy === 'id') {
+                this.data = _.uniqWith(this.data, (a,b) => !_.isUndefined(a.id) && !_.isUndefined(b.id) && a.id === b.id);
+            }
         }
 
         // pruning out Point in segments
