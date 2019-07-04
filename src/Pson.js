@@ -109,7 +109,7 @@ class Pson {
             }
         });
 
-        console.log('rdata', this.data);
+        // console.log('rdata', this.data);
         console.log('read');
         return this;
     }

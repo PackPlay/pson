@@ -50,7 +50,7 @@ class Arc extends Entity{
     }
 
     contains(point) {
-        let d = almostEqual(this.radius, Point.distance(this.center, point), 0.0001, 0);
+        let d = almostEqual(this.radius, Point.distance(this.center, point), almostEqual.FLT_EPSILON, almostEqual.FLT_EPSILON);
         // console.log(d, this.radius, Point.distance(this.center, point));
         if(!d) {
             return false;

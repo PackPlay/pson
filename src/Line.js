@@ -22,7 +22,7 @@ class Line extends Entity {
         let ap = point.subtract(this.a);
         let det = ab.x * ap.y - ab.y * ap.x;
 
-        if(almostEqual(det, 0)) {
+        if(almostEqual(det, 0, almostEqual.FLT_EPSILON, almostEqual.FLT_EPSILON)) {
             let projection = ap.dot(ab) / ab.dot(ab);
             return projection >= 0.0 && projection <= 1.0;
         } else {
