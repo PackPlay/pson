@@ -21,8 +21,8 @@ class Line extends Entity {
         let ab = this.b.subtract(this.a);
         let ap = point.subtract(this.a);
         let det = ab.x * ap.y - ab.y * ap.x;
-
-        if(almostEqual(det, 0, almostEqual.FLT_EPSILON, almostEqual.FLT_EPSILON)) {
+        
+        if(almostEqual(det, 0, 0.001)) {
             let projection = ap.dot(ab) / ab.dot(ab);
             return projection >= 0.0 && projection <= 1.0;
         } else {
@@ -56,8 +56,8 @@ class Line extends Entity {
         let res = [];
         for(let i = 1; i < sampleSize-1; i++) {
             res.push(new Point(
-                a.x + (b.x-a.x) * (i / (sampleSize-1)),
-                a.y + (b.y-a.y) * (i / (sampleSize-1))
+                a.x + ((b.x-a.x) * i / (sampleSize-1)),
+                a.y + ((b.y-a.y) * i / (sampleSize-1))
             ));
         }
         res.unshift(this.a);
